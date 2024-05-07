@@ -1,0 +1,25 @@
+{
+    "appName": "Flutter Example",
+    "@appName": {
+        "description": "App 在裝置上的名稱，考慮行動裝置應該盡可能的短"
+    },
+
+    "example_category_animation_title": "Animations",
+    "example_category_animation_description": "",
+
+    "animation_example_1_title": "Animated Container",
+    "animation_example_1_description": "",
+    "@animation_example_1_title": {
+        "description": "對應 animation_example_1.dart"
+    },
+
+
+    "example_category_layout_title": "Layouts",
+    "example_category_layout_description": "",
+
+    "layout_example_1_title": "Layout Builder",
+    "layout_example_1_description": "",
+    "@layout_example_1_title": {
+
+    }
+}
