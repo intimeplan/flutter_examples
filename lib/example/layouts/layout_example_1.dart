@@ -1,10 +1,10 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_example/example_list.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 ///
-/// [AnimatedContainer] showcase
+/// [LayoutExampleOne] showcase
 ///
 class LayoutExampleOne extends StatefulWidget {
 
@@ -17,21 +17,18 @@ class LayoutExampleOne extends StatefulWidget {
 
   @override
   State createState() {
-    return _AnimationExampleOneState();
+    return _LayoutExampleOneState();
   }
 
 }
 
-class _AnimationExampleOneState extends State<LayoutExampleOne> {
-
-  bool _animated = false;
+class _LayoutExampleOneState extends State<LayoutExampleOne> {
 
   @override
   Widget build(BuildContext context) {
     return BaseExamplePage(
       appbar: widget.appbar,
       body: getBody(),
-      fab: getFab(),
     );
   }
 
@@ -39,62 +36,58 @@ class _AnimationExampleOneState extends State<LayoutExampleOne> {
     return LayoutBuilder(
       builder: (context, constraints) {
         // check stack widget safe size
-        var size = min(constraints.maxWidth, constraints.maxHeight);
-        return SizedBox(
-          width: size,
-          height: size,
-          child: Stack(
-            fit: StackFit.loose,
-            children: [
-              // animate image by container
-              Align(
-                alignment: Alignment.topLeft,
-                child: AnimatedContainer(
-                  clipBehavior: Clip.hardEdge,
-                  color: !_animated ? Colors.yellow : Colors.blue,
-                  padding:  EdgeInsets.all(!_animated ? 8 : 16),
-                  width: !_animated ? size/2 : size,
-                  height: !_animated ? size/2 : size,
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.fastOutSlowIn,
-                  child: SizedBox.expand(
-                      child: Image.asset("assets/480px-Hubble_ultra_deep_field.jpg")
-                  ),
+        var safe_size = min(constraints.maxWidth, constraints.maxHeight);
+        if(constraints.maxWidth >= constraints.maxHeight){
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                SizedBox(
+                  width: safe_size, height: safe_size,
+                  child: Image.asset("assets/480px-Hubble_ultra_deep_field.jpg")
                 ),
-              ),
-              // animate text by container
-              Align(
-                alignment: Alignment.topRight,
-                child: AnimatedContainer(
-                  padding:  const EdgeInsets.all(16),
-                  width: !_animated ? 0 : size,
-                  height: size,
-                  alignment: !_animated ? Alignment.bottomRight : Alignment.bottomLeft,
-                  duration: const Duration(milliseconds: 2000),
-                  curve: Curves.linear,
-                  child: const Text(
-                      maxLines: 1,
+                SizedBox(
+                  width: constraints.maxWidth - safe_size, height: safe_size,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Text(
+                      AppLocalizations.of(context)!.wiki_universe,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: Colors.white),
-                      "The Hubble Ultra-Deep Field image shows some of the most remote galaxies visible to present technology."
-                  ),
+                      // overflow works with maxLines or will it be 1.
+                      maxLines: 1000,
+                    ),
+                  )
                 ),
-              ),
-            ],
+              ]
+            ),
+          );
+        }
+        return SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+              children: [
+                SizedBox(
+                  width: safe_size, height: safe_size,
+                  child: Image.asset("assets/480px-Hubble_ultra_deep_field.jpg")
+                ),
+                SizedBox(
+                  width: safe_size, height: constraints.maxHeight - safe_size,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Text(
+                      AppLocalizations.of(context)!.wiki_universe,
+                      overflow: TextOverflow.ellipsis,
+                      // overflow works with maxLines or will it be 1.
+                      maxLines: 1000,
+                    ),
+                  )
+                ),
+              ]
           ),
         );
       }
     );
   }
 
-  Widget? getFab() {
-    return FloatingActionButton(
-      child: Icon(!_animated ? Icons.play_arrow : Icons.replay),
-      onPressed: (){
-        setState(() {
-          _animated = ! _animated;
-        });
-      }
-    );
-  }
+
 }

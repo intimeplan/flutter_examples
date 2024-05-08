@@ -80,7 +80,7 @@ class ExampleConfig {
 // ignore: must_be_immutable
 class ExampleList extends StatelessWidget {
 
-  late final ExampleConfig? _config;
+  ExampleConfig? _config;
 
   ExampleList({super.key});
 
@@ -107,7 +107,7 @@ class ExampleList extends StatelessWidget {
     List<Example> children = expansion.$2;
     List<Widget> widgets = [];
     for (var child in children) {
-      Widget? widget = _config.build(parent.title, child.title);
+      Widget? widget = _config!.build(parent.title, child.title);
       if (widget == null) {
         continue;
       }
