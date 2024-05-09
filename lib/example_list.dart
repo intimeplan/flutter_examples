@@ -40,8 +40,8 @@ class ExampleConfig {
       ),
       [
         Example(
-            title: AppLocalizations.of(context)!.animation_example_1_title,
-            description: AppLocalizations.of(context)!.example_category_animation_description
+          title: AppLocalizations.of(context)!.animation_example_1_title,
+          description: AppLocalizations.of(context)!.animation_example_1_description
         ),
       ]
     ),
