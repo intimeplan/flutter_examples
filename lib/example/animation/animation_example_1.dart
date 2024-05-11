@@ -6,13 +6,25 @@ import 'package:flutter_example/example_list.dart';
 ///
 /// [AnimatedContainer] showcase
 ///
-class AnimationExampleOne extends StatefulWidget {
-
-  final AppBarHero appbar;
+class AnimationExampleOne extends AbsExamplePage {
 
   const AnimationExampleOne({
-    super.key,
-    required this.appbar
+    super.key, required super.title, super.description
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return _AnimationExampleOne(title: title, description: description);
+  }
+}
+
+class _AnimationExampleOne extends StatefulWidget {
+
+  final String title;
+  final String? description;
+
+  const _AnimationExampleOne({
+    required this.title, this.description
   });
 
   @override
@@ -22,20 +34,22 @@ class AnimationExampleOne extends StatefulWidget {
 
 }
 
-class _AnimationExampleOneState extends State<AnimationExampleOne> {
+class _AnimationExampleOneState extends State<_AnimationExampleOne> {
 
   bool _animated = false;
 
   @override
   Widget build(BuildContext context) {
-    return BaseExamplePage(
-      appbar: widget.appbar,
+
+    return _MyPage(
+      title: widget.title,
+      description: widget.description,
       body: getBody(),
       fab: getFab(),
     );
   }
 
-  Widget? getBody() {
+  Widget getBody() {
     return LayoutBuilder(
       builder: (context, constraints) {
         // check stack widget safe size
@@ -87,7 +101,7 @@ class _AnimationExampleOneState extends State<AnimationExampleOne> {
     );
   }
 
-  Widget? getFab() {
+  Widget getFab() {
     return FloatingActionButton(
       child: Icon(!_animated ? Icons.play_arrow : Icons.replay),
       onPressed: (){
@@ -96,5 +110,26 @@ class _AnimationExampleOneState extends State<AnimationExampleOne> {
         });
       }
     );
+  }
+}
+
+
+class _MyPage extends AbsExamplePage {
+
+  final Widget body, fab;
+  const _MyPage({
+    required super.title, super.description,
+    required this.body, required this.fab,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (context, constraints){
+      return Scaffold(
+        appBar: getAppBar(context, constraints.maxWidth),
+        body: body,
+        floatingActionButton: fab,
+      );
+    });
   }
 }

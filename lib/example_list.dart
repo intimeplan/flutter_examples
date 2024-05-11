@@ -9,8 +9,9 @@ import 'example/layouts/layout_example_1.dart';
 /// Example Page should implement title, description [Text] in [Hero]
 abstract class AbsExamplePage extends StatelessWidget {
 
-  static const String hero_key_title = "title";
-  static const String hero_key_description = "description";
+  // Bug?? hero with same key won't animate again when open another page.
+  // static const String hero_key_title = "title";
+  // static const String hero_key_description = "description";
   static const int description_max_linea = 3;
 
   final String title;
@@ -21,7 +22,7 @@ abstract class AbsExamplePage extends StatelessWidget {
   AppBar getAppBar(BuildContext context, double maxWidth){
     return AppBar(
       title: Hero(
-          tag: AbsExamplePage.hero_key_title,
+          tag: title, // AbsExamplePage.hero_key_title,
           child: Material(
             child: Text(
               title,
@@ -37,14 +38,14 @@ abstract class AbsExamplePage extends StatelessWidget {
               description!,
               Theme.of(context).textTheme.bodyMedium!,
               description_max_linea,
-              maxWidth - 32         // maxWidth - (EdgeInsets left + right)
-            ).height + 32           // height + (EdgeInsets top + bottom)
+              maxWidth - 32           // maxWidth - (EdgeInsets left + right)
+            ).height + 32             // height + (EdgeInsets top + bottom)
           ),
           child: Container(
               padding: const EdgeInsets.all(16),
               alignment: AlignmentDirectional.topStart,
               child: Hero(
-                  tag: AbsExamplePage.hero_key_description,
+                  tag: description!,  // AbsExamplePage.hero_key_description,
                   child: Material(
                     child: Text(description!, maxLines: description_max_linea, overflow: TextOverflow.ellipsis,),
                   )
@@ -106,11 +107,10 @@ class ExampleConfig {
 
   /// Define examples by parent TITLE + child TITLE.
   Widget? build(String parent, String child, String description) {
-    var appbar = AppBarHero(titleTag: child);
-    if (parent ==
-        AppLocalizations.of(context)!.example_category_animation_title) {
+    if (parent == AppLocalizations.of(context)!.example_category_animation_title) {
       if (child == AppLocalizations.of(context)!.animation_example_1_title) {
-        return AnimationExampleOne(appbar: appbar);
+        return AnimationExampleOne(title: child, description: description);
+        // return AnimationExampleOne(appbar: appbar);
       }
     }
     if (parent == AppLocalizations.of(context)!.example_category_layout_title) {
@@ -158,8 +158,8 @@ class ExampleList extends StatelessWidget {
       }
       widgets.add(
         _ListTileHero(
-            titleTag: child.title,
-            subTag: child.description.trim().isNotEmpty ? child.description : null,
+            title: child.title,
+            description: child.description.trim().isNotEmpty ? child.description : null,
             onTap: () {
               Navigator.of(context).push(_MyPageRoute<void>(builder: (context) {
                 return widget;
@@ -168,7 +168,7 @@ class ExampleList extends StatelessWidget {
       );
     }
     return ExpansionTile(
-      title: Text(parent.title),
+      title: Text(parent.title, style: Theme.of(context).textTheme.titleMedium),
       subtitle: parent.description.trim().isNotEmpty ? Text(parent.description) : null,
       children: widgets,
     );
@@ -186,35 +186,37 @@ class _MyPageRoute<T> extends MaterialPageRoute<T> {
 }
 
 /// Compose [_ListTileHero] [AppBarHero] to show hero transition
-/// [titleTag] 以共同顯示的文字作為 [Hero] 標記防呆。
+/// [title] 以共同顯示的文字作為 [Hero] 標記防呆。
 class _ListTileHero extends StatelessWidget {
 
   static final DESCRIPTION_MAX_LINES = 2;
 
-  final String titleTag;
-  final String? subTag;
+  final String title;
+  final String? description;
   final GestureTapCallback? onTap;
   const _ListTileHero({
-    required this.titleTag, required this.onTap, this.subTag
+    required this.title, required this.onTap, this.description
   });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       title: Hero(
-        tag: AbsExamplePage.hero_key_title,
+        tag: title, // AbsExamplePage.hero_key_title,
         // Don't forget Material(), see example from:
         // https://docs.flutter.dev/ui/animations/hero-animations
         child: Material(
-          child: Text(titleTag),
+          child: Text(
+            title, style: Theme.of(context).textTheme.titleSmall,
+          ),
         ),
       ),
-      subtitle: subTag != null && subTag!.trim().isNotEmpty ? Hero(
-        tag: AbsExamplePage.hero_key_description,
+      subtitle: description != null && description!.trim().isNotEmpty ? Hero(
+        tag: description!,  // AbsExamplePage.hero_key_description,
         // Don't forget Material(), see example from:
         // https://docs.flutter.dev/ui/animations/hero-animations
         child: Material(
-          child: Text(subTag!, maxLines: DESCRIPTION_MAX_LINES, overflow: TextOverflow.ellipsis),
+          child: Text(description!, maxLines: DESCRIPTION_MAX_LINES, overflow: TextOverflow.ellipsis),
         ),
       ) : null,
       onTap: onTap,
