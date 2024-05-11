@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_example/example/animation/animation_example_1.dart';
-import 'package:flutter_example/example/layouts/layout_example_1.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'example/layouts/layout_example_2.dart';
+import 'example/layouts/layout_example_1.dart';
 
 
 
 /// Example Page should implement title, description [Text] in [Hero]
 abstract class AbsExamplePage extends StatelessWidget {
 
-  static final String HERO_KEY_TITLE = "title";
-  static final String HERO_KEY_DESCRIPTION = "description";
+  static const String hero_key_title = "title";
+  static const String hero_key_description = "description";
+  static const int description_max_linea = 3;
 
   final String title;
   final String? description;
   const AbsExamplePage({super.key, required this.title, this.description});
 
-  AppBar getAppBar(BuildContext context){
+  /// [maxWidth] to measure text height to set [AppBar.bottom] preferred size
+  AppBar getAppBar(BuildContext context, double maxWidth){
     return AppBar(
       title: Hero(
-          tag: AbsExamplePage.HERO_KEY_TITLE,
+          tag: AbsExamplePage.hero_key_title,
           child: Material(
             child: Text(
               title,
@@ -31,34 +32,35 @@ abstract class AbsExamplePage extends StatelessWidget {
           )
       ),
       bottom: description != null && description!.trim().isNotEmpty ? PreferredSize(
-          preferredSize: Size.zero,
+          preferredSize: Size.fromHeight(
+            _textSize(
+              description!,
+              Theme.of(context).textTheme.bodyMedium!,
+              description_max_linea,
+              maxWidth - 32         // maxWidth - (EdgeInsets left + right)
+            ).height + 32           // height + (EdgeInsets top + bottom)
+          ),
           child: Container(
-              padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
+              padding: const EdgeInsets.all(16),
               alignment: AlignmentDirectional.topStart,
               child: Hero(
-                  tag: AbsExamplePage.HERO_KEY_DESCRIPTION,
+                  tag: AbsExamplePage.hero_key_description,
                   child: Material(
-                    child: Text(description!),
+                    child: Text(description!, maxLines: description_max_linea, overflow: TextOverflow.ellipsis,),
                   )
               )
           )
       ) : null,
     );
   }
-}
 
-/// Example Page should return this from [StatelessWidget.build] or [State.build]
-class BaseExamplePage extends StatelessWidget {
-  final AppBarHero appbar;
-  final Widget? body, fab;
-  const BaseExamplePage({super.key, required this.appbar, this.body, this.fab});
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appbar,
-      body: body,
-      floatingActionButton: fab,
-    );
+  Size _textSize(String text, TextStyle style, int maxLines, double maxWidth) {
+    final TextPainter textPainter = TextPainter(
+        text: TextSpan(text: text, style: style),
+        maxLines: maxLines,
+        textDirection: TextDirection.ltr
+    )..layout(minWidth: 0, maxWidth: maxWidth);
+    return textPainter.size;
   }
 }
 
@@ -113,8 +115,7 @@ class ExampleConfig {
     }
     if (parent == AppLocalizations.of(context)!.example_category_layout_title) {
       if (child == AppLocalizations.of(context)!.layout_example_1_title) {
-        // return LayoutExampleOne(appbar: appbar);
-        return LayoutExampleTwo(title: child, description: description);
+        return LayoutExampleOne(title: child, description: description);
       }
     }
     return null;
@@ -198,7 +199,7 @@ class _ListTileHero extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Hero(
-        tag: AbsExamplePage.HERO_KEY_TITLE,
+        tag: AbsExamplePage.hero_key_title,
         // Don't forget Material(), see example from:
         // https://docs.flutter.dev/ui/animations/hero-animations
         child: Material(
@@ -206,7 +207,7 @@ class _ListTileHero extends StatelessWidget {
         ),
       ),
       subtitle: subTag != null && subTag!.trim().isNotEmpty ? Hero(
-        tag: AbsExamplePage.HERO_KEY_DESCRIPTION,
+        tag: AbsExamplePage.hero_key_description,
         // Don't forget Material(), see example from:
         // https://docs.flutter.dev/ui/animations/hero-animations
         child: Material(
@@ -218,6 +219,25 @@ class _ListTileHero extends StatelessWidget {
   }
 }
 
+
+/// Example Page should return this from [StatelessWidget.build] or [State.build]
+@Deprecated("Use AbsExamplePage class")
+class BaseExamplePage extends StatelessWidget {
+  final AppBarHero appbar;
+  final Widget? body, fab;
+  const BaseExamplePage({super.key, required this.appbar, this.body, this.fab});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: appbar,
+      body: body,
+      floatingActionButton: fab,
+    );
+  }
+}
+
+
+@Deprecated("Use AbsExamplePage class")
 class AppBarHero extends StatelessWidget implements PreferredSizeWidget {
   final String titleTag;
   AppBarHero({super.key, required this.titleTag});
