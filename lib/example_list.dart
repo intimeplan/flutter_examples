@@ -143,6 +143,9 @@ class _MyPageRoute<T> extends MaterialPageRoute<T> {
 /// Compose [_ListTileHero] [AppBarHero] to show hero transition
 /// [titleTag] 以共同顯示的文字作為 [Hero] 標記防呆。
 class _ListTileHero extends StatelessWidget {
+
+  static final DESCRIPTION_MAX_LINES = 2;
+
   final String titleTag;
   final String? subTag;
   final GestureTapCallback? onTap;
@@ -166,7 +169,7 @@ class _ListTileHero extends StatelessWidget {
         // Don't forget Material(), see example from:
         // https://docs.flutter.dev/ui/animations/hero-animations
         child: Material(
-          child: Text(subTag!),
+          child: Text(subTag!, maxLines: DESCRIPTION_MAX_LINES, overflow: TextOverflow.ellipsis),
         ),
       ) : null,
       onTap: onTap,
