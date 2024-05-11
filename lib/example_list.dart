@@ -1,21 +1,66 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_example/example/animation/animation_example_1.dart';
-import 'package:flutter_example/example/layouts/layout_example_1.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'example/layouts/layout_example_1.dart';
 
-/// Example Page should return this from [StatelessWidget.build] or [State.build]
-class BaseExamplePage extends StatelessWidget {
-  final AppBarHero appbar;
-  final Widget? body, fab;
-  const BaseExamplePage({super.key, required this.appbar, this.body, this.fab});
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appbar,
-      body: body,
-      floatingActionButton: fab,
+
+
+/// Example Page should implement title, description [Text] in [Hero]
+abstract class AbsExamplePage extends StatelessWidget {
+
+  static const String hero_key_title = "title";
+  static const String hero_key_description = "description";
+  static const int description_max_linea = 3;
+
+  final String title;
+  final String? description;
+  const AbsExamplePage({super.key, required this.title, this.description});
+
+  /// [maxWidth] to measure text height to set [AppBar.bottom] preferred size
+  AppBar getAppBar(BuildContext context, double maxWidth){
+    return AppBar(
+      title: Hero(
+          tag: AbsExamplePage.hero_key_title,
+          child: Material(
+            child: Text(
+              title,
+              // define from [AppBar#titleTextStyle]
+              style: AppBarTheme.of(context).titleTextStyle ??
+                  Theme.of(context).textTheme.titleLarge,
+            ),
+          )
+      ),
+      bottom: description != null && description!.trim().isNotEmpty ? PreferredSize(
+          preferredSize: Size.fromHeight(
+            _textSize(
+              description!,
+              Theme.of(context).textTheme.bodyMedium!,
+              description_max_linea,
+              maxWidth - 32         // maxWidth - (EdgeInsets left + right)
+            ).height + 32           // height + (EdgeInsets top + bottom)
+          ),
+          child: Container(
+              padding: const EdgeInsets.all(16),
+              alignment: AlignmentDirectional.topStart,
+              child: Hero(
+                  tag: AbsExamplePage.hero_key_description,
+                  child: Material(
+                    child: Text(description!, maxLines: description_max_linea, overflow: TextOverflow.ellipsis,),
+                  )
+              )
+          )
+      ) : null,
     );
+  }
+
+  Size _textSize(String text, TextStyle style, int maxLines, double maxWidth) {
+    final TextPainter textPainter = TextPainter(
+        text: TextSpan(text: text, style: style),
+        maxLines: maxLines,
+        textDirection: TextDirection.ltr
+    )..layout(minWidth: 0, maxWidth: maxWidth);
+    return textPainter.size;
   }
 }
 
@@ -60,17 +105,17 @@ class ExampleConfig {
   ];
 
   /// Define examples by parent TITLE + child TITLE.
-  Widget? build(String title, String child) {
+  Widget? build(String parent, String child, String description) {
     var appbar = AppBarHero(titleTag: child);
-    if (title ==
+    if (parent ==
         AppLocalizations.of(context)!.example_category_animation_title) {
       if (child == AppLocalizations.of(context)!.animation_example_1_title) {
         return AnimationExampleOne(appbar: appbar);
       }
     }
-    if (title == AppLocalizations.of(context)!.example_category_layout_title) {
+    if (parent == AppLocalizations.of(context)!.example_category_layout_title) {
       if (child == AppLocalizations.of(context)!.layout_example_1_title) {
-        return LayoutExampleOne(appbar: appbar);
+        return LayoutExampleOne(title: child, description: description);
       }
     }
     return null;
@@ -107,7 +152,7 @@ class ExampleList extends StatelessWidget {
     List<Example> children = expansion.$2;
     List<Widget> widgets = [];
     for (var child in children) {
-      Widget? widget = _config!.build(parent.title, child.title);
+      Widget? widget = _config!.build(parent.title, child.title, child.description);
       if (widget == null) {
         continue;
       }
@@ -157,7 +202,7 @@ class _ListTileHero extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Hero(
-        tag: titleTag,
+        tag: AbsExamplePage.hero_key_title,
         // Don't forget Material(), see example from:
         // https://docs.flutter.dev/ui/animations/hero-animations
         child: Material(
@@ -165,7 +210,7 @@ class _ListTileHero extends StatelessWidget {
         ),
       ),
       subtitle: subTag != null && subTag!.trim().isNotEmpty ? Hero(
-        tag: subTag!,
+        tag: AbsExamplePage.hero_key_description,
         // Don't forget Material(), see example from:
         // https://docs.flutter.dev/ui/animations/hero-animations
         child: Material(
@@ -177,6 +222,25 @@ class _ListTileHero extends StatelessWidget {
   }
 }
 
+
+/// Example Page should return this from [StatelessWidget.build] or [State.build]
+@Deprecated("Use AbsExamplePage class")
+class BaseExamplePage extends StatelessWidget {
+  final AppBarHero appbar;
+  final Widget? body, fab;
+  const BaseExamplePage({super.key, required this.appbar, this.body, this.fab});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: appbar,
+      body: body,
+      floatingActionButton: fab,
+    );
+  }
+}
+
+
+@Deprecated("Use AbsExamplePage class")
 class AppBarHero extends StatelessWidget implements PreferredSizeWidget {
   final String titleTag;
   AppBarHero({super.key, required this.titleTag});
@@ -201,3 +265,4 @@ class AppBarHero extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => _appBar.preferredSize;
 }
+
