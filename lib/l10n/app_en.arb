@@ -28,6 +28,13 @@
 
     },
 
+
+    "layout_example_2_title": "Recursive Layout",
+    "layout_example_2_description": "Build a Fibonacci Rectangle by Recursive Layout",
+    "@layout_example_2_title": {
+
+    },
+
     "wiki_universe_title": "Universe - Wikipedia",
     "@wiki_universe_title": {
 
