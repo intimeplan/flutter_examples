@@ -4,6 +4,7 @@ import 'package:flutter_example/example/animation/animation_example_2.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'example/layouts/layout_example_1.dart';
+import 'example/layouts/layout_example_2.dart';
 
 
 
@@ -106,6 +107,10 @@ class ExampleConfig {
           title: AppLocalizations.of(context)!.layout_example_1_title,
           description: AppLocalizations.of(context)!.layout_example_1_description
         ),
+        Example(
+            title: AppLocalizations.of(context)!.layout_example_2_title,
+            description: AppLocalizations.of(context)!.layout_example_2_description
+        ),
       ]
     ),
   ];
@@ -123,6 +128,9 @@ class ExampleConfig {
     if (parent == AppLocalizations.of(context)!.example_category_layout_title) {
       if (child == AppLocalizations.of(context)!.layout_example_1_title) {
         return LayoutExampleOne(title: child, description: description);
+      }
+      if (child == AppLocalizations.of(context)!.layout_example_2_title) {
+        return LayoutExampleTwo(title: child, description: description);
       }
     }
     return null;
