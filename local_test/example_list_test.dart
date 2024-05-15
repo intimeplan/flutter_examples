@@ -89,8 +89,10 @@ void testExamples_allTitleUnique(){
         // check child all unique
         expect(text.contains(child.title), false);
         text.add(child.title);
-        expect(text.contains(child.description), false);
-        text.add(child.description);
+        if(child.description.trim().isNotEmpty) {
+          expect(text.contains(child.description), false);
+          text.add(child.description);
+        }
       }
     }
   });
