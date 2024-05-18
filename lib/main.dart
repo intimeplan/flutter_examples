@@ -3,9 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_example/example_list.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
+
+import 'example/interaction/interaction_example_1.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+      const MyApp()
+  );
 }
 
 class MyApp extends StatelessWidget {

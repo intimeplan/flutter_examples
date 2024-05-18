@@ -16,7 +16,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 /// 2. [ExampleList]
 /// 3. [BaseExamplePage]
 class _Note {}
-class MockBuildContext extends Mock implements BuildContext {}
+class _MockBuildContext extends Mock implements BuildContext {}
 
 
 void main() {

@@ -28,12 +28,21 @@
 
     },
 
-
     "layout_example_2_title": "Recursive Layout",
     "layout_example_2_description": "Build a Fibonacci Rectangle by Recursive Layout",
     "@layout_example_2_title": {
 
     },
+
+    "example_category_interaction_title": "Interaction",
+    "example_category_interaction_description": "",
+
+    "interaction_example_1_title": "Nesting Navigation",
+    "interaction_example_1_description": "",
+    "@layout_example_1_title": {
+
+    },
+
 
     "wiki_universe_title": "Universe - Wikipedia",
     "@wiki_universe_title": {
