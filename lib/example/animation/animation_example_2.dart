@@ -52,7 +52,7 @@ class _AnimationExampleTwoState extends State<_AnimationExampleTwo>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _description = AppLocalizations.of(context)!.wiki_universe;
+    _description = AppLocalizations.of(context)!.wiki_universe_description;
     _description = _description;
     _controller.duration = Duration(
       milliseconds: (

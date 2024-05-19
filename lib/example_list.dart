@@ -3,9 +3,11 @@ import 'package:flutter_example/example/animation/animation_example_1.dart';
 import 'package:flutter_example/example/animation/animation_example_2.dart';
 import 'package:flutter_example/example/interaction/interaction_example_1.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 import 'example/layouts/layout_example_1.dart';
 import 'example/layouts/layout_example_2.dart';
+import 'example/templates/template_example_1.dart';
 
 
 
@@ -126,6 +128,30 @@ class ExampleConfig {
       ),
     ]
     ),
+    (
+    Example(
+        title: AppLocalizations.of(context)!.example_category_interaction_title,
+        description: AppLocalizations.of(context)!.example_category_interaction_description
+    ),
+    [
+      Example(
+          title: AppLocalizations.of(context)!.interaction_example_1_title,
+          description: AppLocalizations.of(context)!.interaction_example_1_description
+      ),
+    ]
+    ),
+    (
+    Example(
+        title: AppLocalizations.of(context)!.example_category_template_title,
+        description: AppLocalizations.of(context)!.example_category_template_description
+    ),
+    [
+      Example(
+          title: AppLocalizations.of(context)!.template_example_1_title,
+          description: AppLocalizations.of(context)!.template_example_1_description
+      ),
+    ]
+    ),
   ];
 
   /// Define examples by parent TITLE + child TITLE.
@@ -149,6 +175,16 @@ class ExampleConfig {
     if (parent == AppLocalizations.of(context)!.example_category_interaction_title) {
       if (child == AppLocalizations.of(context)!.interaction_example_1_title) {
         return InteractionExampleOne(title: child, description: description);
+      }
+    }
+    if (parent == AppLocalizations.of(context)!.example_category_interaction_title) {
+      if (child == AppLocalizations.of(context)!.interaction_example_1_title) {
+        return InteractionExampleOne(title: child, description: description);
+      }
+    }
+    if (parent == AppLocalizations.of(context)!.example_category_template_title) {
+      if (child == AppLocalizations.of(context)!.template_example_1_title) {
+        return TemplateExampleOne(title: child, description: description);
       }
     }
     return null;
