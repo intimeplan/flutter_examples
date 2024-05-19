@@ -41,7 +41,7 @@ class LayoutExampleOne extends AbsExamplePage {
                         child: Padding(
                           padding: const EdgeInsets.all(16),
                           child: Text(
-                            AppLocalizations.of(context)!.wiki_universe,
+                            AppLocalizations.of(context)!.wiki_universe_description,
                             overflow: TextOverflow.ellipsis,
                             // overflow works with maxLines or will it be 1.
                             maxLines: 1000,
@@ -65,7 +65,7 @@ class LayoutExampleOne extends AbsExamplePage {
                       child: Padding(
                         padding: const EdgeInsets.all(16),
                         child: Text(
-                          AppLocalizations.of(context)!.wiki_universe,
+                          AppLocalizations.of(context)!.wiki_universe_description,
                           overflow: TextOverflow.ellipsis,
                           // overflow works with maxLines or will it be 1.
                           maxLines: 1000,
