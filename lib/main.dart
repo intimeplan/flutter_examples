@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_example/example_list.dart';
+import 'package:flutter_example/information_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
@@ -71,15 +72,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-    });
-  }
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -90,32 +84,8 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-
-      body: CustomScrollView(
-        // Add the app bar and list of items as slivers in the next steps.
-        slivers: <Widget>[
-          // Add the app bar to the CustomScrollView.
-          SliverAppBar(
-            // Provide a standard title.
-            title: Text(AppLocalizations.of(context) != null ? AppLocalizations.of(context)!.appName : ""),
-            // Allows the user to reveal the app bar if they begin scrolling
-            // back up the list of items.
-            floating: true,
-            // // Display a placeholder widget to visualize the shrinking size.
-            // flexibleSpace: Placeholder(),
-            // // Make the initial height of the SliverAppBar larger than normal.
-            // expandedHeight: 200,
-          ),
-          // Next, create a SliverList
-          ExampleList()
-        ]
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-
+      key: _scaffoldKey,
+      body: _MyPages(navigatorKey: _navigatorKey),
       // navigation drawer
       // https://docs.flutter.dev/cookbook/design/drawer
       drawer: Drawer(
@@ -138,19 +108,73 @@ class _MyHomePageState extends State<MyHomePage> {
             ListTile(
               title: Text(AppLocalizations.of(context)!.example_page_title),
               onTap: () {
-                // Update the state of the app.
-                // ...
+                _scaffoldKey.currentState?.closeDrawer();
+                _navigatorKey.currentState?.pushReplacementNamed("examples");
               },
             ),
             ListTile(
               title: Text(AppLocalizations.of(context)!.information_page_title),
               onTap: () {
-                // Update the state of the app.
-                // ...
+                // Navigator.pop(context);
+                _scaffoldKey.currentState?.closeDrawer();
+                _navigatorKey.currentState?.pushReplacementNamed("information");
               },
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _MyPages extends StatelessWidget{
+
+  final GlobalKey<NavigatorState> navigatorKey;
+  const _MyPages({super.key, required this.navigatorKey});
+
+  @override
+  Widget build(BuildContext context) {
+    return HeroControllerScope(
+      controller: MaterialApp.createMaterialHeroController(),
+      child: Navigator(
+        key: navigatorKey,
+        initialRoute: "examples",
+        onGenerateRoute: (RouteSettings settings) {
+          switch (settings.name) {
+            // navigator default page
+            case "examples":
+              return MaterialPageRoute<void>(
+                settings: settings,
+                builder: (BuildContext context) => CustomScrollView(
+                  // Add the app bar and list of items as slivers in the next steps.
+                  slivers: <Widget>[
+                    // Add the app bar to the CustomScrollView.
+                    SliverAppBar(
+                      // Provide a standard title.
+                      title: Text(AppLocalizations.of(context) != null ? AppLocalizations.of(context)!.example_page_title : ""),
+                      // Allows the user to reveal the app bar if they begin scrolling
+                      // back up the list of items.
+                      floating: true,
+                      // // Display a placeholder widget to visualize the shrinking size.
+                      // flexibleSpace: Placeholder(),
+                      // // Make the initial height of the SliverAppBar larger than normal.
+                      // expandedHeight: 200,
+                    ),
+                    // Next, create a SliverList
+                    ExampleList()
+                  ]
+                ),
+              );
+            // navigator final page
+            case "information":
+              return MaterialPageRoute<void>(
+                settings: settings,
+                builder: (BuildContext context) => InformationPage(),
+              );
+            default:
+              throw Exception('Unknown Route: ${settings.name}');
+          }
+        },
       ),
     );
   }
