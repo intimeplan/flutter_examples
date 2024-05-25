@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan),
         useMaterial3: true,
       ),
       home: const MyHomePage(
@@ -133,17 +133,17 @@ class _MyHomePageState extends State<MyHomePage> {
                 // change color while the other colors stay the same.
                 color: Theme.of(context).colorScheme.inversePrimary,
               ),
-              child: Text('Drawer Header'),
+              child: Text(AppLocalizations.of(context)!.appName),
             ),
             ListTile(
-              title: const Text('Item 1'),
+              title: Text(AppLocalizations.of(context)!.example_page_title),
               onTap: () {
                 // Update the state of the app.
                 // ...
               },
             ),
             ListTile(
-              title: const Text('Item 2'),
+              title: Text(AppLocalizations.of(context)!.information_page_title),
               onTap: () {
                 // Update the state of the app.
                 // ...

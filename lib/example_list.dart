@@ -17,7 +17,7 @@ abstract class AbsExamplePage extends StatelessWidget {
   // Bug?? hero with same key won't animate again when open another page.
   // static const String hero_key_title = "title";
   // static const String hero_key_description = "description";
-  static const int description_max_linea = 3;
+  static const int description_max_lines = 3;
 
   final String title;
   final String? description;
@@ -42,7 +42,7 @@ abstract class AbsExamplePage extends StatelessWidget {
             _textSize(
               description!,
               Theme.of(context).textTheme.bodyMedium!,
-              description_max_linea,
+              description_max_lines,
               maxWidth - 32           // maxWidth - (EdgeInsets left + right)
             ).height + 32             // height + (EdgeInsets top + bottom)
           ),
@@ -52,7 +52,7 @@ abstract class AbsExamplePage extends StatelessWidget {
               child: Hero(
                   tag: description!,  // AbsExamplePage.hero_key_description,
                   child: Material(
-                    child: Text(description!, maxLines: description_max_linea, overflow: TextOverflow.ellipsis,),
+                    child: Text(description!, maxLines: description_max_lines, overflow: TextOverflow.ellipsis,),
                   )
               )
           )
@@ -274,49 +274,5 @@ class _ListTileHero extends StatelessWidget {
       onTap: onTap,
     );
   }
-}
-
-
-/// Example Page should return this from [StatelessWidget.build] or [State.build]
-@Deprecated("Use AbsExamplePage class")
-class BaseExamplePage extends StatelessWidget {
-  final AppBarHero appbar;
-  final Widget? body, fab;
-  const BaseExamplePage({super.key, required this.appbar, this.body, this.fab});
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appbar,
-      body: body,
-      floatingActionButton: fab,
-    );
-  }
-}
-
-
-@Deprecated("Use AbsExamplePage class")
-class AppBarHero extends StatelessWidget implements PreferredSizeWidget {
-  final String titleTag;
-  AppBarHero({super.key, required this.titleTag});
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-        title: Hero(
-            tag: titleTag,
-            child: Material(
-              child: Text(
-                titleTag,
-                // define from [AppBar#titleTextStyle]
-                style: AppBarTheme.of(context).titleTextStyle ??
-                    Theme.of(context).textTheme.titleLarge,
-              ),
-            )));
-  }
-
-  /// measure appbar size #CHEAT
-  final AppBar _appBar = AppBar();
-  @override
-  Size get preferredSize => _appBar.preferredSize;
 }
 

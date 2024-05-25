@@ -4,6 +4,14 @@
         "description": "App 在裝置上的名稱，考慮行動裝置應該盡可能的短"
     },
 
+    "example_page_title": "Examples",
+    "@example_page_title": {
+    },
+
+    "information_page_title": "Information",
+    "@information_page_title": {
+    },
+
     "example_category_animation_title": "Animations",
     "example_category_animation_description": "",
 

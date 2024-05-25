@@ -110,7 +110,7 @@ class TemplateExampleOne extends StatelessWidget {
         preferredSize: Size.fromHeight(
           _textSize(description!,
             Theme.of(context).textTheme.bodyMedium!,
-            AbsExamplePage.description_max_linea,
+            AbsExamplePage.description_max_lines,
             maxWidth - 32           // maxWidth - (EdgeInsets left + right)
           ).height + 32             // height + (EdgeInsets top + bottom)
         ),
@@ -120,7 +120,7 @@ class TemplateExampleOne extends StatelessWidget {
           child: Hero(
             tag: description!,
             child: Material(
-              child: Text(description!, maxLines: AbsExamplePage.description_max_linea, overflow: TextOverflow.ellipsis,),
+              child: Text(description!, maxLines: AbsExamplePage.description_max_lines, overflow: TextOverflow.ellipsis,),
             )
           )
         )
