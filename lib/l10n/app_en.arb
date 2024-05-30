@@ -1,72 +1,100 @@
 {
+
     "appName": "Flutter Example",
     "@appName": {
         "description": "App 在裝置上的名稱，考慮行動裝置應該盡可能的短"
     },
 
+
     "example_page_title": "Examples",
-    "@example_page_title": {
-    },
+    "@example_page_title": { },
+
 
     "information_page_title": "Information",
-    "@information_page_title": {
-    },
+    "@information_page_title": { },
+
 
     "example_category_animation_title": "Animations",
     "example_category_animation_description": "",
 
+
     "animation_example_1_title": "Animated Container",
-    "animation_example_1_description": "",
     "@animation_example_1_title": {
         "description": "對應 animation_example_1.dart"
     },
+    "animation_example_1_description": "",
+
 
     "animation_example_2_title": "Animated Text",
-    "animation_example_2_description": "",
     "@animation_example_2_title": {
         "description": "對應 animation_example_2.dart"
     },
+    "animation_example_2_description": "",
+
 
     "example_category_layout_title": "Layouts",
+    "@example_category_layout_title": {},
     "example_category_layout_description": "",
 
     "layout_example_1_title": "Layout Builder",
+    "@layout_example_1_title": {},
     "layout_example_1_description": "Builds a widget tree that can depend on the parent widget's size.",
-    "@layout_example_1_title": {
 
-    },
 
     "layout_example_2_title": "Recursive Layout",
+    "@layout_example_2_title": {},
     "layout_example_2_description": "Build a Fibonacci Rectangle by Recursive Layout",
-    "@layout_example_2_title": {
 
-    },
 
     "example_category_interaction_title": "Interactions",
+    "@example_category_interaction_title": {},
     "example_category_interaction_description": "",
 
-    "interaction_example_1_title": "Nesting Navigation",
-    "interaction_example_1_description": "Navigator in Navigator, and Hero Widget works across them.",
-    "@layout_example_1_title": {
 
-    },
+    "interaction_example_1_title": "Nesting Navigation",
+    "@interaction_example_1_title": {},
+    "interaction_example_1_description": "Navigator in Navigator, and Hero Widget works across them.",
+
 
     "example_category_template_title": "Templates",
+    "@example_category_template_title": {},
     "example_category_template_description": "",
 
-    "template_example_1_title": "Event Provider",
-    "template_example_1_description": "Control the behavior of FloatingActionButton as SliverAppBar when scrolling.",
-    "@layout_example_1_title": {
 
-    },
+    "template_example_1_title": "Event Provider",
+    "@template_example_1_title": {},
+    "template_example_1_description": "Control the behavior of FloatingActionButton as SliverAppBar when scrolling.",
+
+
 
     "wiki_universe_title": "Universe - Wikipedia",
-    "@wiki_universe_title": {
-
-    },
+    "@wiki_universe_title": {},
 
     "wiki_universe_description": "The universe is all of space and time and their contents. It comprises all of existence, any fundamental interaction, physical process and physical constant, and therefore all forms of energy and matter, and the structures they form, from sub-atomic particles to entire galaxies. Space and time, according to the prevailing cosmological theory of the Big Bang, emerged together 13.787±0.020 billion years ago, and the universe has been expanding ever since. Today the universe has expanded into an age and size that is physically only in parts observable as the observable universe, which is approximately 93 billion light-years in diameter at the present day, while the spatial size, if any, of the entire universe is unknown.",
-    "@wiki_universe_description": {
+    "@wiki_universe_description": {},
 
-    }
+    "information_source_title": "Source Code on GitHub",
+    "@information_source_title": { },
+
+    "information_source_content_url": "https://github.com/intimeplan/flutter_examples",
+    "@information_source_content_url": { },
+
+
+
+    "information_store_title": "App on the Store",
+    "@information_store_title": { },
+
+    "information_privacy_title": "Privacy Policy",
+    "@information_store_title": { },
+
+    "information_privacy_content_url": "https://sites.google.com/view/intimeplan-app/home/flutter-example-app/privacy-policy",
+    "@information_privacy_content_url": { },
+
+
+
+    "always_at_the_bottom": "",
+    "@always_at_the_bottom": {
+        "description": "Dealing with commas is annoying"
+     }
+
 }
