@@ -13,3 +13,5 @@ _local/key.properties
 **/*.jks
 /_local/
 /.idea/
+.DS_Store
+
