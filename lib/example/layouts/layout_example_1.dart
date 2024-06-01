@@ -1,100 +1,83 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_example/example_list.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 ///
-/// [AnimatedContainer] showcase
+/// [LayoutExampleTwo] showcase
 ///
-class LayoutExampleOne extends StatefulWidget {
-
-  final AppBarHero appbar;
+class LayoutExampleOne extends AbsExamplePage {
 
   const LayoutExampleOne({
-    super.key,
-    required this.appbar
+    super.key, required super.title, super.description
   });
 
   @override
-  State createState() {
-    return _AnimationExampleOneState();
-  }
-
-}
-
-class _AnimationExampleOneState extends State<LayoutExampleOne> {
-
-  bool _animated = false;
-
-  @override
   Widget build(BuildContext context) {
-    return BaseExamplePage(
-      appbar: widget.appbar,
-      body: getBody(),
-      fab: getFab(),
-    );
+    return LayoutBuilder(builder: (context, constraints){
+      return Scaffold(
+        appBar: getAppBar(context, constraints.maxWidth),
+        body: getBody(),
+      );
+    });
   }
 
   Widget? getBody() {
     return LayoutBuilder(
-      builder: (context, constraints) {
-        // check stack widget safe size
-        var size = min(constraints.maxWidth, constraints.maxHeight);
-        return SizedBox(
-          width: size,
-          height: size,
-          child: Stack(
-            fit: StackFit.loose,
-            children: [
-              // animate image by container
-              Align(
-                alignment: Alignment.topLeft,
-                child: AnimatedContainer(
-                  clipBehavior: Clip.hardEdge,
-                  color: !_animated ? Colors.yellow : Colors.blue,
-                  padding:  EdgeInsets.all(!_animated ? 8 : 16),
-                  width: !_animated ? size/2 : size,
-                  height: !_animated ? size/2 : size,
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.fastOutSlowIn,
-                  child: SizedBox.expand(
+        builder: (context, constraints) {
+          // check stack widget safe size
+          var safe_size = min(constraints.maxWidth, constraints.maxHeight);
+          if(constraints.maxWidth >= constraints.maxHeight){
+            return SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                  children: [
+                    SizedBox(
+                        width: safe_size, height: safe_size,
+                        child: Image.asset("assets/480px-Hubble_ultra_deep_field.jpg")
+                    ),
+                    SizedBox(
+                        width: constraints.maxWidth - safe_size, height: safe_size,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Text(
+                            AppLocalizations.of(context)!.wiki_universe_description,
+                            overflow: TextOverflow.ellipsis,
+                            // overflow works with maxLines or will it be 1.
+                            maxLines: 1000,
+                          ),
+                        )
+                    ),
+                  ]
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+                children: [
+                  SizedBox(
+                      width: safe_size, height: safe_size,
                       child: Image.asset("assets/480px-Hubble_ultra_deep_field.jpg")
                   ),
-                ),
-              ),
-              // animate text by container
-              Align(
-                alignment: Alignment.topRight,
-                child: AnimatedContainer(
-                  padding:  const EdgeInsets.all(16),
-                  width: !_animated ? 0 : size,
-                  height: size,
-                  alignment: !_animated ? Alignment.bottomRight : Alignment.bottomLeft,
-                  duration: const Duration(milliseconds: 2000),
-                  curve: Curves.linear,
-                  child: const Text(
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: Colors.white),
-                      "The Hubble Ultra-Deep Field image shows some of the most remote galaxies visible to present technology."
+                  SizedBox(
+                      width: safe_size, height: constraints.maxHeight - safe_size,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Text(
+                          AppLocalizations.of(context)!.wiki_universe_description,
+                          overflow: TextOverflow.ellipsis,
+                          // overflow works with maxLines or will it be 1.
+                          maxLines: 1000,
+                        ),
+                      )
                   ),
-                ),
-              ),
-            ],
-          ),
-        );
-      }
+                ]
+            ),
+          );
+        }
     );
   }
 
-  Widget? getFab() {
-    return FloatingActionButton(
-      child: Icon(!_animated ? Icons.play_arrow : Icons.replay),
-      onPressed: (){
-        setState(() {
-          _animated = ! _animated;
-        });
-      }
-    );
-  }
+
 }
