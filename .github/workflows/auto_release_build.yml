@@ -12,9 +12,9 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      ANDROID_KEYSTORE: android_keystore
-      ANDROID_KEYSTORE_PROPERTIES: android_keystore_properties
-      GCP_SERVICE_ACCOUNT: gcp_service_account
+      ANDROID_KEYSTORE: "android/_local/upload-keystore.jks"
+      ANDROID_KEYSTORE_PROPERTIES: "android/_local/key.properties"
+      GCP_SERVICE_ACCOUNT: "android/_local/gcp_service_account.json"
 
     steps:
       # Checkout repository codebase
@@ -66,7 +66,7 @@ jobs:
       - name: Deploy to Play Store (Internal testing)
         uses: r0adkll/upload-google-play@v1
         with:
-          serviceAccountJsonPlainText: ${{env.SERVICE_ACCOUNT_PATH}}
+          serviceAccountJson: ${{env.SERVICE_ACCOUNT_PATH}}
           packageName: app.intimeplan.flutterexp
           track: internal
           status: completed
