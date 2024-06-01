@@ -44,14 +44,20 @@ jobs:
 
       # Decode Android Keystore
       - name: Decode Android Keystore
-        run: echo "${{secrets.ANDROID_KEYSTORE}}" | base64 --decode > ${{env.ANDROID_KEYSTORE}}
+        run: |  
+          mkdir ${{env.ANDROID_KEYSTORE}}
+          echo "${{secrets.ANDROID_KEYSTORE}}" | base64 --decode > ${{env.ANDROID_KEYSTORE}}
 
       - name: Decode Android Keystore Properties
-        run: echo "${{ secrets.ANDROID_KEYSTORE_PROPERTIES }}" | base64 --decode > ${{ env.ANDROID_KEYSTORE_PROPERTIES }}
+        run: |  
+          mkdir ${{env.ANDROID_KEYSTORE_PROPERTIES}}
+          echo "${{ secrets.ANDROID_KEYSTORE_PROPERTIES }}" | base64 --decode > ${{ env.ANDROID_KEYSTORE_PROPERTIES }}
 
       # Decode GCP Service Account
       - name: Decode Android Service Account
-        run: echo "${{ secrets.GCP_SERVICE_ACCOUNT }}" | base64 --decode > ${{ env.GCP_SERVICE_ACCOUNT }}
+        run: |  
+          mkdir ${{env.GCP_SERVICE_ACCOUNT}}
+          echo "${{ secrets.GCP_SERVICE_ACCOUNT }}" | base64 --decode > ${{ env.GCP_SERVICE_ACCOUNT }}
 
       # Build Android Bundle
       - name: Flutter Install Dependencies
