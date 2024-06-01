@@ -43,20 +43,14 @@ jobs:
 
 
       # Decode Android Keystore
-      - name: Decode Android Keystore
+      - name: Decode Android Keystore, Properties and GCP Service Account
         run: |  
-          mkdirs ${{env.ANDROID_KEYSTORE}}
+          mkdir "android/_local"
+          touch ${{env.ANDROID_KEYSTORE}}
           echo "${{secrets.ANDROID_KEYSTORE}}" | base64 --decode > ${{env.ANDROID_KEYSTORE}}
-
-      - name: Decode Android Keystore Properties
-        run: |  
-          mkdirs ${{env.ANDROID_KEYSTORE_PROPERTIES}}
+          touch ${{env.ANDROID_KEYSTORE_PROPERTIES}}
           echo "${{ secrets.ANDROID_KEYSTORE_PROPERTIES }}" | base64 --decode > ${{ env.ANDROID_KEYSTORE_PROPERTIES }}
-
-      # Decode GCP Service Account
-      - name: Decode Android Service Account
-        run: |  
-          mkdirs ${{env.GCP_SERVICE_ACCOUNT}}
+          touch ${{env.GCP_SERVICE_ACCOUNT}}
           echo "${{ secrets.GCP_SERVICE_ACCOUNT }}" | base64 --decode > ${{ env.GCP_SERVICE_ACCOUNT }}
 
       # Build Android Bundle
