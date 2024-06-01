@@ -12,9 +12,9 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      ANDROID_KEYSTORE: android_keystore
-      ANDROID_KEYSTORE_PROPERTIES: android_keystore_properties
-      GCP_SERVICE_ACCOUNT: gcp_service_account
+      ANDROID_KEYSTORE: "android/_local/upload-keystore.jks"
+      ANDROID_KEYSTORE_PROPERTIES: "android/_local/key.properties"
+      GCP_SERVICE_ACCOUNT: "android/_local/gcp_service_account.json"
 
     steps:
       # Checkout repository codebase
@@ -43,15 +43,15 @@ jobs:
 
 
       # Decode Android Keystore
-      - name: Decode Android Keystore
-        run: echo "${{secrets.ANDROID_KEYSTORE}}" | base64 --decode > ${{env.ANDROID_KEYSTORE}}
-
-      - name: Decode Android Keystore Properties
-        run: echo "${{ secrets.ANDROID_KEYSTORE_PROPERTIES }}" | base64 --decode > ${{ env.ANDROID_KEYSTORE_PROPERTIES }}
-
-      # Decode GCP Service Account
-      - name: Decode Android Service Account
-        run: echo "${{ secrets.GCP_SERVICE_ACCOUNT }}" | base64 --decode > ${{ env.GCP_SERVICE_ACCOUNT }}
+      - name: Decode Android Keystore, Properties and GCP Service Account
+        run: |  
+          mkdir "android/_local"
+          touch ${{env.ANDROID_KEYSTORE}}
+          echo "${{secrets.ANDROID_KEYSTORE}}" | base64 --decode > ${{env.ANDROID_KEYSTORE}}
+          touch ${{env.ANDROID_KEYSTORE_PROPERTIES}}
+          echo "${{ secrets.ANDROID_KEYSTORE_PROPERTIES }}" | base64 --decode > ${{ env.ANDROID_KEYSTORE_PROPERTIES }}
+          touch ${{env.GCP_SERVICE_ACCOUNT}}
+          echo "${{ secrets.GCP_SERVICE_ACCOUNT }}" | base64 --decode > ${{ env.GCP_SERVICE_ACCOUNT }}
 
       # Build Android Bundle
       - name: Flutter Install Dependencies
@@ -66,7 +66,7 @@ jobs:
       - name: Deploy to Play Store (Internal testing)
         uses: r0adkll/upload-google-play@v1
         with:
-          serviceAccountJsonPlainText: ${{env.SERVICE_ACCOUNT_PATH}}
+          serviceAccountJson: ${{env.GCP_SERVICE_ACCOUNT}}
           packageName: app.intimeplan.flutterexp
           track: internal
           status: completed
