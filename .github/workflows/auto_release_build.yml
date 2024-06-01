@@ -30,7 +30,6 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 21
-      - run: java HelloWorldApp.java
 
 
       # Setup Flutter in VM
