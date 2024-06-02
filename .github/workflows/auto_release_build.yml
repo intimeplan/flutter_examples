@@ -53,23 +53,26 @@ jobs:
           touch ${{env.GCP_SERVICE_ACCOUNT}}
           echo "${{ secrets.GCP_SERVICE_ACCOUNT }}" | base64 --decode > ${{ env.GCP_SERVICE_ACCOUNT }}
 
-      # Build Android Bundle
-      - name: Flutter Install Dependencies
-        run: flutter pub get
+      # Delegate to Fastlane
+      - run: fastlane internal
 
-      - name: Build App Bundle
-        run: flutter build appbundle --release --obfuscate --split-debug-info=build/app/outputs/symbols
-
-
-      # Deploy bundle to Google Play internal testing
-      # https://github.com/r0adkll/upload-google-play
-      - name: Deploy to Play Store (Internal testing)
-        uses: r0adkll/upload-google-play@v1
-        with:
-          serviceAccountJson: ${{env.GCP_SERVICE_ACCOUNT}}
-          packageName: app.intimeplan.flutterexp
-          track: internal
-          status: completed
-          releaseFiles: build/app/outputs/bundle/release/app-release.aab
-          mappingFile: build/app/outputs/mapping/release/mapping.txt
-          debugSymbols: build/app/intermediates/merged_native_libs/release/out/lib
+#      # Build Android Bundle
+#      - name: Flutter Install Dependencies
+#        run: flutter pub get
+#
+#      - name: Build App Bundle
+#        run: flutter build appbundle --release --obfuscate --split-debug-info=build/app/outputs/symbols
+#
+#
+#      # Deploy bundle to Google Play internal track
+#      # https://github.com/r0adkll/upload-google-play
+#      - name: Deploy to Play Store (Internal Track)
+#        uses: r0adkll/upload-google-play@v1
+#        with:
+#          serviceAccountJson: ${{env.GCP_SERVICE_ACCOUNT}}
+#          packageName: app.intimeplan.flutterexp
+#          track: internal
+#          status: completed
+#          releaseFiles: build/app/outputs/bundle/release/app-release.aab
+#          mappingFile: build/app/outputs/mapping/release/mapping.txt
+#          debugSymbols: build/app/intermediates/merged_native_libs/release/out/lib
