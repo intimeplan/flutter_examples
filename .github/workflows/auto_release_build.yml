@@ -39,7 +39,7 @@ jobs:
         with:
           channel: stable
           flutter-version: 3.19.3
-      - run: flutter --version
+      - run: flutter doctor -v
 
 
       # Decode Android Keystore
