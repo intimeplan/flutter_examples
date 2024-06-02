@@ -22,14 +22,14 @@ class InteractionExampleOne extends AbsExamplePage {
     return BackEventBroadcast(
       child: LayoutBuilder(builder: (context, constraints){
         return Scaffold(
-            appBar: getAppBar(context, constraints.maxWidth),
-            body: getBody(),
-            floatingActionButton: FloatingActionButton(
-                child: const Icon(Icons.arrow_back),
-                onPressed: () {
-                  const BackEvent().dispatch(context);
-                }
-            )
+          appBar: getAppBar(context, constraints.maxWidth),
+          body: getBody(),
+          floatingActionButton: FloatingActionButton(
+            child: const Icon(Icons.arrow_back),
+            onPressed: () {
+              const BackEvent().dispatch(context);
+            }
+          )
         );
       }),
     );
@@ -69,105 +69,105 @@ class PageNavigator extends StatelessWidget {
         return child!;
       },
       child: LayoutBuilder(
-          builder: (context, constraints){
-            // check stack widget safe size
-            var safe_size = min(constraints.maxWidth, constraints.maxHeight);
-            return HeroControllerScope(
-              controller: MaterialApp.createMaterialHeroController(),
-              child: Navigator(
-                key: _myNavigatorKey,
-                initialRoute: "page/1",
-                onGenerateRoute: (RouteSettings settings) {
-                  switch (settings.name) {
+        builder: (context, constraints){
+          // check stack widget safe size
+          var safe_size = min(constraints.maxWidth, constraints.maxHeight);
+          return HeroControllerScope(
+            controller: MaterialApp.createMaterialHeroController(),
+            child: Navigator(
+              key: _myNavigatorKey,
+              initialRoute: "page/1",
+              onGenerateRoute: (RouteSettings settings) {
+                switch (settings.name) {
                   // navigator default page
-                    case "page/1":
-                      return MaterialPageRoute<void>(
-                        settings: settings,
-                        builder: (BuildContext context) => GestureDetector(
-                          onTap: (){
-                            _popChildNavigator();
-                          },
-                          child: Container(
-                              alignment: Alignment.center,
-                              child: SizedBox.square(
-                                dimension: safe_size,
-                                child: ChildNavigator(navigatorKey: _childNavigatorKey),
-                              )
-                          ),
+                  case "page/1":
+                    return MaterialPageRoute<void>(
+                      settings: settings,
+                      builder: (BuildContext context) => GestureDetector(
+                        onTap: (){
+                          _popChildNavigator();
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: SizedBox.square(
+                            dimension: safe_size,
+                            child: ChildNavigator(navigatorKey: _childNavigatorKey),
+                          )
                         ),
-                      );
+                      ),
+                    );
                   // navigator final page
-                    case "page/2":
-                      return _PageRoute(
-                          settings: settings,
-                          builder: (BuildContext context) => LayoutBuilder(
-                              builder: (context, constraints) {
-                                // check stack widget safe size
-                                var safe_size = min(constraints.maxWidth, constraints.maxHeight);
-                                if(constraints.maxWidth >= constraints.maxHeight){
-                                  return SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Row(
-                                        children: [
-                                          SizedBox(
-                                            width: safe_size, height: safe_size,
-                                            child: Hero(
-                                                tag: InteractionExampleOne.hero_tag_image,
-                                                child: Image.asset("assets/480px-Hubble_ultra_deep_field.jpg", fit: BoxFit.fill,)
-                                            ),
-                                          ),
-                                          SizedBox(
-                                              width: constraints.maxWidth - safe_size, height: safe_size,
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(16),
-                                                child: Text(
-                                                  AppLocalizations.of(context)!.wiki_universe_description,
-                                                  overflow: TextOverflow.ellipsis,
-                                                  // overflow works with maxLines or will it be 1.
-                                                  maxLines: 1000,
-                                                ),
-                                              )
-                                          ),
-                                        ]
-                                    ),
-                                  );
-                                }
+                  case "page/2":
+                    return _PageRoute(
+                        settings: settings,
+                        builder: (BuildContext context) => LayoutBuilder(
+                            builder: (context, constraints) {
+                              // check stack widget safe size
+                              var safe_size = min(constraints.maxWidth, constraints.maxHeight);
+                              if(constraints.maxWidth >= constraints.maxHeight){
                                 return SingleChildScrollView(
-                                  scrollDirection: Axis.vertical,
-                                  child: Column(
-                                      children: [
-                                        SizedBox(
-                                          width: safe_size, height: safe_size,
-                                          child: Hero(
-                                              tag: InteractionExampleOne.hero_tag_image,
-                                              child: Image.asset("assets/480px-Hubble_ultra_deep_field.jpg", fit: BoxFit.fill,)
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: safe_size, height: safe_size,
+                                        child: Hero(
+                                            tag: InteractionExampleOne.hero_tag_image,
+                                            child: Image.asset("assets/480px-Hubble_ultra_deep_field.jpg", fit: BoxFit.fill,)
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: constraints.maxWidth - safe_size, height: safe_size,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(16),
+                                          child: Text(
+                                            AppLocalizations.of(context)!.wiki_universe_description,
+                                            overflow: TextOverflow.ellipsis,
+                                            // overflow works with maxLines or will it be 1.
+                                            maxLines: 1000,
                                           ),
-                                        ),
-                                        SizedBox(
-                                            width: safe_size, height: constraints.maxHeight - safe_size,
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(16),
-                                              child: Text(
-                                                AppLocalizations.of(context)!.wiki_universe_description,
-                                                overflow: TextOverflow.ellipsis,
-                                                // overflow works with maxLines or will it be 1.
-                                                maxLines: 1000,
-                                              ),
-                                            )
-                                        ),
-                                      ]
+                                        )
+                                      ),
+                                    ]
                                   ),
                                 );
                               }
-                          )
-                      );
-                    default:
-                      throw Exception('Unknown Route: ${settings.name}');
-                  }
-                },
-              ),
-            );
-          }
+                              return SingleChildScrollView(
+                                scrollDirection: Axis.vertical,
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                      width: safe_size, height: safe_size,
+                                      child: Hero(
+                                          tag: InteractionExampleOne.hero_tag_image,
+                                          child: Image.asset("assets/480px-Hubble_ultra_deep_field.jpg", fit: BoxFit.fill,)
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: safe_size, height: constraints.maxHeight - safe_size,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(16),
+                                        child: Text(
+                                          AppLocalizations.of(context)!.wiki_universe_description,
+                                          overflow: TextOverflow.ellipsis,
+                                          // overflow works with maxLines or will it be 1.
+                                          maxLines: 1000,
+                                        ),
+                                      )
+                                    ),
+                                  ]
+                                ),
+                              );
+                            }
+                        )
+                    );
+                  default:
+                    throw Exception('Unknown Route: ${settings.name}');
+                }
+              },
+            ),
+          );
+        }
       ),
     );
   }
@@ -222,8 +222,8 @@ class ChildNavigator extends StatelessWidget {
                       margin: EdgeInsets.all(16),
                       child: ListTile(
                         leading: Hero(
-                            tag: InteractionExampleOne.hero_tag_image,
-                            child: Image.asset("assets/480px-Hubble_ultra_deep_field.jpg", fit: BoxFit.fill,)
+                          tag: InteractionExampleOne.hero_tag_image,
+                          child: Image.asset("assets/480px-Hubble_ultra_deep_field.jpg", fit: BoxFit.fill,)
                         ),
                         trailing: Icon(Icons.ads_click),
                         title: Text(AppLocalizations.of(context)!.wiki_universe_title),
@@ -234,35 +234,35 @@ class ChildNavigator extends StatelessWidget {
               );
             case "child/2":
               return MaterialPageRoute<void>(
-                  settings: settings,
-                  builder: (BuildContext context) => GestureDetector(
-                    onTap: (){
-                      navigatorKey.currentState?.popUntil((route) => route.isFirst);
-                      navigatorKey.currentContext?.findAncestorStateOfType<NavigatorState>()?.pushNamed("page/2");
-                    },
-                    child: Card.filled(
-                      clipBehavior: Clip.hardEdge,
-                      margin: const EdgeInsets.all(16),
-                      child: Stack(
-                        fit: StackFit.passthrough,
-                        children: [
-                          Hero(
-                              tag: InteractionExampleOne.hero_tag_image,
-                              child: Image.asset("assets/480px-Hubble_ultra_deep_field.jpg", fit: BoxFit.fill,)
-                          ),
-                          Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: Text(AppLocalizations.of(context)!.wiki_universe_description, style: TextStyle(color: Colors.white))
-                          ),
-                          Container(
-                            padding: const EdgeInsets.all(16),
-                            alignment: Alignment.bottomRight,
-                            child: const Icon(Icons.ads_click, color: Colors.white),
-                          ),
-                        ],
-                      ),
+                settings: settings,
+                builder: (BuildContext context) => GestureDetector(
+                  onTap: (){
+                    navigatorKey.currentState?.popUntil((route) => route.isFirst);
+                    navigatorKey.currentContext?.findAncestorStateOfType<NavigatorState>()?.pushNamed("page/2");
+                  },
+                  child: Card.filled(
+                    clipBehavior: Clip.hardEdge,
+                    margin: const EdgeInsets.all(16),
+                    child: Stack(
+                      fit: StackFit.passthrough,
+                      children: [
+                        Hero(
+                          tag: InteractionExampleOne.hero_tag_image,
+                          child: Image.asset("assets/480px-Hubble_ultra_deep_field.jpg", fit: BoxFit.fill,)
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Text(AppLocalizations.of(context)!.wiki_universe_description, style: TextStyle(color: Colors.white))
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          alignment: Alignment.bottomRight,
+                          child: const Icon(Icons.ads_click, color: Colors.white),
+                        ),
+                      ],
                     ),
-                  )
+                  ),
+                )
               );
             default:
               throw Exception('Unknown Route: ${settings.name}');
