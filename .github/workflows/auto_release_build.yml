@@ -53,8 +53,10 @@ jobs:
           touch ${{env.GCP_SERVICE_ACCOUNT}}
           echo "${{ secrets.GCP_SERVICE_ACCOUNT }}" | base64 --decode > ${{ env.GCP_SERVICE_ACCOUNT }}
 
-      # Delegate to Fastlane
-      - run: fastlane internal
+      # Run Fastlane
+      - run: |
+          cd android
+          fastlane internal
 
 #      # Build Android Bundle
 #      - name: Flutter Install Dependencies
