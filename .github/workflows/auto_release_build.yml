@@ -1,8 +1,8 @@
 name:  AUTO_RELEASE_BUILD
 on:
   push:
-    branches:
-      - main
+#    branches:
+#      - main
     tags:
       - alpha.*
 
@@ -38,7 +38,8 @@ jobs:
         with:
           channel: stable
           flutter-version: 3.19.3
-      - run: flutter pub get
+      - run:
+          flutter pub get
 
       # Setup Secrets for Release Build
       - name: Setup Secrets for Release Build
@@ -56,6 +57,14 @@ jobs:
         run: |
           cd android
           fastlane build_app_bundle
+          
+
+      # Clean Secret Resource
+      - name: Clean Secret Resource
+        run: |
+          shred -u ${{env.ANDROID_KEYSTORE}}
+          shred -u ${{env.ANDROID_KEYSTORE_PROPERTIES}}
+          shred -u ${{env.GCP_SERVICE_ACCOUNT}}
 
 #      - name: Build App Bundle
 #        run: flutter build appbundle --release --obfuscate --split-debug-info=build/app/outputs/symbols
