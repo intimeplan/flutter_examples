@@ -1,0 +1,60 @@
+name:  APPLE_RELEASE_BUILD
+on:
+  push:
+#    branches:
+#      - main
+    tags:
+      - apple.*
+
+jobs:
+  apple-release-build:
+    name: apple-release-build
+    runs-on: macos-latest
+
+    env:
+      # Auth Key from App Managers
+      APPLE_AUTH_KEY: "ios/_local/AuthKey.p8"
+      APPLE_AUTH_KEY_ID: "ios/_local/AuthKeyId.txt"
+      APPLE_ISSUER_ID: "ios/_local/IssuerId.txt"
+
+    steps:
+      # Checkout repository codebase
+      # https://github.com/actions/checkout
+      # https://stackoverflow.com/questions/67131269/what-is-the-use-of-actions-checkout-in-github-actions
+      - name: Checkout Branch
+        uses: actions/checkout@v4
+
+
+      # Setup Flutter and Dependencies
+      # https://github.com/subosito/flutter-action
+      - name: Setup Flutter and Dependencies
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.19.3
+      - run:
+          flutter pub get
+
+      # Setup Secrets for Release Build
+      - name: Setup Secrets for Release Build
+        run: |  
+          mkdir "ios/_local"
+          touch ${{env.APPLE_AUTH_KEY}}
+          echo "${{secrets.APPLE_AUTH_KEY}}" > ${{env.APPLE_AUTH_KEY}}
+          touch ${{env.APPLE_AUTH_KEY_ID}}
+          echo "${{ secrets.APPLE_AUTH_KEY_ID }}" > ${{ env.APPLE_AUTH_KEY_ID }}
+          touch ${{env.APPLE_ISSUER_ID}}
+          echo "${{ secrets.APPLE_ISSUER_ID }}" > ${{ env.APPLE_ISSUER_ID }}
+
+      # Fastlane Build App Bundle
+      - name: Run Fastlane
+        run: |
+          cd ios
+          fastlane build_ipa_to_testflight
+          
+      # Clean Secret Resource
+      - name: Clean Secret Resource
+        run: |
+          shred -u ${{env.APPLE_AUTH_KEY}}
+          shred -u ${{env.APPLE_AUTH_KEY_ID}}
+          shred -u ${{env.APPLE_ISSUER_ID}}
