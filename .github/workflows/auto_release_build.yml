@@ -1,10 +1,10 @@
-## Github Actions 工作流程部署到 Play Store 中的內部測試
 name:  AUTO_RELEASE_BUILD
-
 on:
-  # 當任何新程式碼推送到主分支時執行此工作流程
   push:
-    branches: [main]
+#    branches:
+#      - main
+    tags:
+      - alpha.*
 
 jobs:
   android-release-build:
@@ -23,7 +23,7 @@ jobs:
       - name: Checkout Branch Main
         uses: actions/checkout@v4
 
-      # Setup Java in VM
+      # Setup Java for Android
       # https://github.com/actions/setup-java
       - name: Setup Java for Android
         uses: actions/setup-java@v4
@@ -31,19 +31,18 @@ jobs:
           distribution: 'temurin'
           java-version: 19
 
-
-      # Setup Flutter in VM
+      # Setup Flutter and Dependencies
       # https://github.com/subosito/flutter-action
-      - name: Setup Flutter
+      - name: Setup Flutter and Dependencies
         uses: subosito/flutter-action@v2
         with:
           channel: stable
           flutter-version: 3.19.3
-      - run: flutter --version
+      - run:
+          flutter pub get
 
-
-      # Decode Android Keystore
-      - name: Decode Android Keystore, Properties and GCP Service Account
+      # Setup Secrets for Release Build
+      - name: Setup Secrets for Release Build
         run: |  
           mkdir "android/_local"
           touch ${{env.ANDROID_KEYSTORE}}
@@ -53,17 +52,26 @@ jobs:
           touch ${{env.GCP_SERVICE_ACCOUNT}}
           echo "${{ secrets.GCP_SERVICE_ACCOUNT }}" | base64 --decode > ${{ env.GCP_SERVICE_ACCOUNT }}
 
-      # Build Android Bundle
-      - name: Flutter Install Dependencies
-        run: flutter pub get
+      # Fastlane Build App Bundle
+      - name: Run Fastlane
+        run: |
+          cd android
+          fastlane build_app_bundle
+          
 
-      - name: Build App Bundle
-        run: flutter build appbundle --release --obfuscate --split-debug-info=build/app/outputs/symbols
+      # Clean Secret Resource
+      - name: Clean Secret Resource
+        run: |
+          shred -u ${{env.ANDROID_KEYSTORE}}
+          shred -u ${{env.ANDROID_KEYSTORE_PROPERTIES}}
+          shred -u ${{env.GCP_SERVICE_ACCOUNT}}
 
+#      - name: Build App Bundle
+#        run: flutter build appbundle --release --obfuscate --split-debug-info=build/app/outputs/symbols
 
-      # Deploy bundle to Google Play internal testing
+      # Deploy bundle to Google Play internal track
       # https://github.com/r0adkll/upload-google-play
-      - name: Deploy to Play Store (Internal testing)
+      - name: Upload to Play Store (Internal Track)
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJson: ${{env.GCP_SERVICE_ACCOUNT}}

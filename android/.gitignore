@@ -1,9 +1,12 @@
-gradle-wrapper.jar
+#gradle-wrapper.jar
 /.gradle
 /captures/
-/gradlew
-/gradlew.bat
+#/gradlew
+#/gradlew.bat
+#/gradlew.properties
 /local.properties
+#/settings.gradle
+#/flutter_example_android.iml
 GeneratedPluginRegistrant.java
 
 # Remember to never publicly share your keystore.

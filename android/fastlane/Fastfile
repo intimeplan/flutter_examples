@@ -1,0 +1,56 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+
+#   desc "Run All Tests"
+#   lane :test do
+#     gradle(task: "test")
+#   end
+
+  desc "Build App Bundle"
+  lane :build_app_bundle do
+    latest_version_code = google_play_track_version_codes(
+        track: "internal"
+    )[0]
+    build_android_app(
+        task: 'bundle',
+        build_type: 'Release',
+        properties: {
+            # A (good) way to update version code (from fastlane document) doesn't work
+            # https://docs.fastlane.tools/actions/build_android_app/
+#             "android.injected.version.code" => latest_version_code+1,
+            # Now (not good) solution cooperates with application build.gradle
+            # https://stackoverflow.com/questions/50000118/fastlane-gradle-command-properties-not-passed
+            "fastlaneVersionCode" => latest_version_code+1
+        }
+    )
+#     upload_to_play_store(
+#         track: "internal",              # production, beta, alpha, internal
+#         release_status: "completed",    # completed, draft, halted, inProgress
+#         aab: "../build/app/outputs/bundle/release/app-release.aab",
+#         skip_upload_apk: true,
+#         skip_upload_metadata: true,
+#         skip_upload_changelogs: true,
+#         skip_upload_images: true,
+#         skip_upload_screenshots: true,
+#     )
+    # sh "your_script.sh"
+    # You can also use other beta testing services here
+  end
+
+end
