@@ -13,9 +13,11 @@ jobs:
 
     env:
       # Auth Key from App Managers
-      APPLE_AUTH_KEY: "ios/_local/AuthKey.p8"
-      APPLE_AUTH_KEY_ID: "ios/_local/AuthKeyId.txt"
+      APPLE_AUTH_KEY: "ios/_local/AppManagers_AuthKey.p8"
+      APPLE_AUTH_ID: "ios/_local/AppManagers_AuthId.txt"
       APPLE_ISSUER_ID: "ios/_local/IssuerId.txt"
+      APPLE_DISTRIBUTE_CERT: "ios/_local/DistributeCert.p12"
+      APPLE_DISTRIBUTE_PWD: "ios/_local/DistributePwd.txt"
 
     steps:
       # Checkout repository codebase
@@ -40,11 +42,15 @@ jobs:
         run: |  
           mkdir "ios/_local"
           touch ${{env.APPLE_AUTH_KEY}}
-          echo "${{secrets.APPLE_AUTH_KEY}}" > ${{env.APPLE_AUTH_KEY}}
-          touch ${{env.APPLE_AUTH_KEY_ID}}
-          echo "${{ secrets.APPLE_AUTH_KEY_ID }}" > ${{ env.APPLE_AUTH_KEY_ID }}
+          echo "${{secrets.APPLE_AUTH_KEY}}" | base64 --decode -o ${{env.APPLE_AUTH_KEY}}
+          touch ${{env.APPLE_AUTH_ID}}
+          echo "${{ secrets.APPLE_AUTH_ID }}" | base64 --decode -o ${{ env.APPLE_AUTH_ID }}
           touch ${{env.APPLE_ISSUER_ID}}
-          echo "${{ secrets.APPLE_ISSUER_ID }}" > ${{ env.APPLE_ISSUER_ID }}
+          echo "${{ secrets.APPLE_ISSUER_ID }}" | base64 --decode -o ${{ env.APPLE_ISSUER_ID }}
+          touch ${{env.APPLE_DISTRIBUTE_CERT}}
+          echo "${{ secrets.APPLE_DISTRIBUTE_CERT }}" | base64 --decode -o ${{ env.APPLE_DISTRIBUTE_CERT }}
+          touch ${{env.APPLE_DISTRIBUTE_PWD}}
+          echo "${{ secrets.APPLE_DISTRIBUTE_PWD }}" | base64 --decode -o ${{ env.APPLE_DISTRIBUTE_PWD }}
 
       # Fastlane Build App Bundle
       - name: Run Fastlane
@@ -56,5 +62,7 @@ jobs:
       - name: Clean Secret Resource
         run: |
           shred -u ${{env.APPLE_AUTH_KEY}}
-          shred -u ${{env.APPLE_AUTH_KEY_ID}}
+          shred -u ${{env.APPLE_AUTH_ID}}
           shred -u ${{env.APPLE_ISSUER_ID}}
+          shred -u ${{env.APPLE_DISTRIBUTE_CERT}}
+          shred -u ${{env.APPLE_DISTRIBUTE_PWD}}

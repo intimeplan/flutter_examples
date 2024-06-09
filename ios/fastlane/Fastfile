@@ -16,23 +16,64 @@
 default_platform(:ios)
 
 platform :ios do
-  desc "Build App IPA"
-  lane :build_ipa_to_testflight do
-    build_app(
-        scheme: "Runner",
-        workspace: "Runner.xcworkspace",
-        output_directory: "../build/ios/ipa",
-        output_name: "Runner.ipa"
-    )
-    api_key = app_store_connect_api_key(
-        key_id: File.read("../_local/AuthKeyId.txt"),
-        issuer_id: File.read("../_local/IssuerId.txt"),
-        key_filepath: "_local/AuthKey.p8",
-    )
-    upload_to_testflight(
-        api_key: api_key,
-        ipa: "../build/ios/ipa/Runner.ipa"
-    )
-    # add actions here: https://docs.fastlane.tools/actions
-  end
+    desc "Build IPA to TestFlight"
+    lane :build_ipa_to_testflight do
+
+        api_key = app_store_connect_api_key(
+            key_id: File.read("../_local/AppManagers_AuthId.txt"),
+            issuer_id: File.read("../_local/IssuerId.txt"),
+            key_filepath: "_local/AppManagers_AuthKey.p8",
+        )
+        keychain_name = "fastlane_keychain"
+        keychain_password = "password"
+
+        delete_keychain(
+            name: keychain_name
+        ) if File.exist? File.expand_path("~/Library/Keychains/#{keychain_name}-db")
+
+        create_keychain(
+            name: keychain_name,
+            password: keychain_password,
+#             unlock: true,
+            timeout: 300,
+            lock_when_sleeps: true,
+            lock_after_timeout: true,
+        )
+
+        import_certificate(
+            certificate_path: "_local/DistributeCert.p12",
+            certificate_password: File.read("../_local/DistributePwd.txt"),
+            keychain_name: keychain_name,
+            keychain_password: keychain_password,
+            log_output: true
+        )
+
+        sigh(
+            api_key: api_key,
+            filename: "app.mobileprovision"
+        )
+
+        # turn off automatic signing during build so correct code signing identity is guaranteed to be used
+        update_code_signing_settings(
+            use_automatic_signing: false,
+        )
+
+        build_app(
+            scheme: "Runner",
+            workspace: "Runner.xcworkspace",
+            output_directory: "../build/ios/ipa",
+            output_name: "Runner.ipa",
+            export_method: "app-store",
+        )
+
+
+        upload_to_testflight(
+            api_key: api_key,
+            ipa: "../build/ios/ipa/Runner.ipa"
+        )
+
+        # add actions here: https://docs.fastlane.tools/actions
+    end
+
+
 end
