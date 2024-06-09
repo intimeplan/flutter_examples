@@ -1,0 +1,73 @@
+name:  APPLE_RELEASE_BUILD
+on:
+  push:
+    branches:
+      - exp_ios_fastlane
+#    tags:
+#      - apple.*
+
+jobs:
+  apple-release-build:
+    name: apple-release-build
+    runs-on: macos-latest
+
+    env:
+      # Auth Key from App Managers
+      APPLE_AUTH_KEY: "ios/_local/AppManagers_AuthKey.p8"
+      APPLE_AUTH_ID: "ios/_local/AppManagers_AuthId.txt"
+      APPLE_ISSUER_ID: "ios/_local/IssuerId.txt"
+      APPLE_DISTRIBUTE_CERT: "ios/_local/DistributeCert.p12"
+      APPLE_DISTRIBUTE_PWD: "ios/_local/DistributePwd.txt"
+
+    steps:
+      # Checkout repository codebase
+      # https://github.com/actions/checkout
+      # https://stackoverflow.com/questions/67131269/what-is-the-use-of-actions-checkout-in-github-actions
+      - name: Checkout Branch
+        uses: actions/checkout@v4
+
+
+      # Setup Flutter and Dependencies
+      # https://github.com/subosito/flutter-action
+      - name: Setup Flutter and Dependencies
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.19.3
+      - run: |
+          flutter pub get
+          cd ios
+          pod install
+          pod update
+          pod repo update
+          cd ..
+
+      # Setup Secrets for Release Build
+      - name: Setup Secrets for Release Build
+        run: |  
+          mkdir "ios/_local"
+          touch ${{env.APPLE_AUTH_KEY}}
+          echo "${{secrets.APPLE_AUTH_KEY}}" | base64 --decode -o ${{env.APPLE_AUTH_KEY}}
+          touch ${{env.APPLE_AUTH_ID}}
+          echo "${{ secrets.APPLE_AUTH_ID }}" | base64 --decode -o ${{ env.APPLE_AUTH_ID }}
+          touch ${{env.APPLE_ISSUER_ID}}
+          echo "${{ secrets.APPLE_ISSUER_ID }}" | base64 --decode -o ${{ env.APPLE_ISSUER_ID }}
+          touch ${{env.APPLE_DISTRIBUTE_CERT}}
+          echo "${{ secrets.APPLE_DISTRIBUTE_CERT }}" | base64 --decode -o ${{ env.APPLE_DISTRIBUTE_CERT }}
+          touch ${{env.APPLE_DISTRIBUTE_PWD}}
+          echo "${{ secrets.APPLE_DISTRIBUTE_PWD }}" | base64 --decode -o ${{ env.APPLE_DISTRIBUTE_PWD }}
+
+      # Fastlane Build App Bundle
+      - name: Run Fastlane
+        run: |
+          cd ios
+          fastlane build_ipa_to_testflight
+          
+      # Clean Secret Resource
+      - name: Clean Secret Resource
+        run: |
+          rm ${{env.APPLE_AUTH_KEY}}
+          rm ${{env.APPLE_AUTH_ID}}
+          rm ${{env.APPLE_ISSUER_ID}}
+          rm ${{env.APPLE_DISTRIBUTE_CERT}}
+          rm ${{env.APPLE_DISTRIBUTE_PWD}}
