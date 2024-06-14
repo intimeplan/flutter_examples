@@ -5,6 +5,7 @@ import 'package:flutter_example/example/interaction/interaction_example_1.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
+import 'example/animation/animation_example_3.dart';
 import 'example/layouts/layout_example_1.dart';
 import 'example/layouts/layout_example_2.dart';
 import 'example/templates/template_example_1.dart';
@@ -60,6 +61,44 @@ abstract class AbsExamplePage extends StatelessWidget {
     );
   }
 
+  /// [maxWidth] to measure text height to set [AppBar.bottom] preferred size
+  SliverAppBar getSliverAppBar(BuildContext context, double maxWidth){
+    return SliverAppBar(
+      floating: true,
+      title: Hero(
+          tag: title, // AbsExamplePage.hero_key_title,
+          child: Material(
+            child: Text(
+              title,
+              // define from [AppBar#titleTextStyle]
+              style: AppBarTheme.of(context).titleTextStyle ??
+                  Theme.of(context).textTheme.titleLarge,
+            ),
+          )
+      ),
+      bottom: description != null && description!.trim().isNotEmpty ? PreferredSize(
+          preferredSize: Size.fromHeight(
+              _textSize(
+                  description!,
+                  Theme.of(context).textTheme.bodyMedium!,
+                  description_max_lines,
+                  maxWidth - 32           // maxWidth - (EdgeInsets left + right)
+              ).height + 32             // height + (EdgeInsets top + bottom)
+          ),
+          child: Container(
+              padding: const EdgeInsets.all(16),
+              alignment: AlignmentDirectional.topStart,
+              child: Hero(
+                  tag: description!,  // AbsExamplePage.hero_key_description,
+                  child: Material(
+                    child: Text(description!, maxLines: description_max_lines, overflow: TextOverflow.ellipsis,),
+                  )
+              )
+          )
+      ) : null,
+    );
+  }
+
   Size _textSize(String text, TextStyle style, int maxLines, double maxWidth) {
     final TextPainter textPainter = TextPainter(
         text: TextSpan(text: text, style: style),
@@ -97,6 +136,10 @@ class ExampleConfig {
         Example(
             title: AppLocalizations.of(context)!.animation_example_2_title,
             description: AppLocalizations.of(context)!.animation_example_2_description
+        ),
+        Example(
+            title: AppLocalizations.of(context)!.animation_example_3_title,
+            description: AppLocalizations.of(context)!.animation_example_3_description
         ),
       ]
     ),
@@ -150,6 +193,9 @@ class ExampleConfig {
       }
       if (child == AppLocalizations.of(context)!.animation_example_2_title) {
         return AnimationExampleTwo(title: child, description: description);
+      }
+      if (child == AppLocalizations.of(context)!.animation_example_3_title) {
+        return AnimationExampleThree(title: child, description: description);
       }
     }
     if (parent == AppLocalizations.of(context)!.example_category_layout_title) {
