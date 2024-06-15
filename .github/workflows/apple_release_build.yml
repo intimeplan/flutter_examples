@@ -2,7 +2,7 @@ name:  APPLE_RELEASE_BUILD
 on:
   push:
     branches:
-      - apple/**
+      - apple.**
 #    tags:
 #      - apple.**
 

@@ -2,7 +2,7 @@ name:  AUTO_RELEASE_BUILD
 on:
   push:
     branches:
-      - android/**
+      - android.**
 #    tags:
 #      - android.**
 
