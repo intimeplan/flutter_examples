@@ -1,10 +1,10 @@
 name:  AUTO_RELEASE_BUILD
 on:
   push:
-#    branches:
-#      - main
-    tags:
-      - alpha.*
+    branches:
+      - android.**
+#    tags:
+#      - android.**
 
 jobs:
   android-release-build:

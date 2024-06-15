@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_example/example_list.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -64,7 +65,7 @@ class PageNavigator extends StatelessWidget {
         // if the last back event is null,
         // current builder is on page initializing, don't pop
         if(event.last != null) {
-          Navigator.of(context, rootNavigator: true).pop();
+          Navigator.of(context).pop();
         }
         return child!;
       },

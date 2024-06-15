@@ -32,6 +32,14 @@
     "animation_example_2_description": "",
 
 
+    "animation_example_3_title": "Cubic Comparison",
+    "@animation_example_3_title": {
+        "description": "對應 animation_example_3.dart"
+    },
+    "animation_example_3_description": "Control slide by curve animations",
+
+
+
     "example_category_layout_title": "Layouts",
     "@example_category_layout_title": {},
     "example_category_layout_description": "",

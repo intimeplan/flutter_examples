@@ -114,10 +114,15 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 
 flutter_launcher_icons:
-  android: "launcher_icon"
-  ios: true
   image_path: "assets/appLogo.jpg"
+
+  android: "launcher_icon"
   min_sdk_android: 21 # android min sdk min:16, default 21
+  adaptive_icon_background: "#64C8C8"
+  adaptive_icon_foreground: "assets/appLogo.jpg"
+
+  ios: true
+  image_path_ios: "assets/appLogo.jpg"
 #  web:
 #    generate: true
 #    image_path: "path/to/image.png"
