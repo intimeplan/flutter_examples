@@ -74,6 +74,16 @@
     "template_example_1_description": "Control the behavior of FloatingActionButton as SliverAppBar when scrolling.",
 
 
+    "example_category_network_title": "Network",
+    "@example_category_network_title": {},
+    "example_category_network_description": "",
+
+
+    "network_example_1_title": "REST API Test",
+    "@network_example_1_title": {},
+    "network_example_1_description": "",
+
+
 
     "wiki_universe_title": "Universe - Wikipedia",
     "@wiki_universe_title": {},
