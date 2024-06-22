@@ -45,6 +45,12 @@ dependencies:
   # https://pub.dev/packages/url_launcher
   url_launcher: ^6.2.6
   http: ^1.2.1
+  # https://pub.dev/packages/permission_handler
+  permission_handler:
+  # https://pub.dev/packages/path_provider
+  path_provider:
+  # https://pub.dev/packages/share_plus
+  share_plus:
 
 dev_dependencies:
   flutter_test:
@@ -62,6 +68,7 @@ dev_dependencies:
   # 需要搭配指令去創建對應平台的圖資： flutter pub run flutter_launcher_icons
   # https://pub.dev/packages/flutter_launcher_icons
   flutter_launcher_icons: "^0.13.1"
+
 
 
 # For information on the generic Dart part of this file, see the
