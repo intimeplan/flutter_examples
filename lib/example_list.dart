@@ -10,6 +10,7 @@ import 'example/animation/animation_example_3.dart';
 import 'example/layouts/layout_example_1.dart';
 import 'example/layouts/layout_example_2.dart';
 import 'example/templates/template_example_1.dart';
+import 'example/templates/template_example_2.dart';
 
 
 
@@ -161,40 +162,44 @@ class ExampleConfig {
       ]
     ),
     (
-    Example(
-        title: AppLocalizations.of(context)!.example_category_interaction_title,
-        description: AppLocalizations.of(context)!.example_category_interaction_description
-    ),
-    [
       Example(
-          title: AppLocalizations.of(context)!.interaction_example_1_title,
-          description: AppLocalizations.of(context)!.interaction_example_1_description
+          title: AppLocalizations.of(context)!.example_category_interaction_title,
+          description: AppLocalizations.of(context)!.example_category_interaction_description
       ),
-    ]
+      [
+        Example(
+            title: AppLocalizations.of(context)!.interaction_example_1_title,
+            description: AppLocalizations.of(context)!.interaction_example_1_description
+        ),
+      ]
     ),
     (
-    Example(
-        title: AppLocalizations.of(context)!.example_category_template_title,
-        description: AppLocalizations.of(context)!.example_category_template_description
-    ),
-    [
       Example(
-          title: AppLocalizations.of(context)!.template_example_1_title,
-          description: AppLocalizations.of(context)!.template_example_1_description
+          title: AppLocalizations.of(context)!.example_category_template_title,
+          description: AppLocalizations.of(context)!.example_category_template_description
       ),
-    ]
+      [
+        Example(
+            title: AppLocalizations.of(context)!.template_example_1_title,
+            description: AppLocalizations.of(context)!.template_example_1_description
+        ),
+        Example(
+            title: AppLocalizations.of(context)!.template_example_2_title,
+            description: AppLocalizations.of(context)!.template_example_2_description
+        ),
+      ]
     ),
     (
-    Example(
-        title: AppLocalizations.of(context)!.example_category_network_title,
-        description: AppLocalizations.of(context)!.example_category_network_description
-    ),
-    [
       Example(
-          title: AppLocalizations.of(context)!.network_example_1_title,
-          description: AppLocalizations.of(context)!.network_example_1_description
+          title: AppLocalizations.of(context)!.example_category_network_title,
+          description: AppLocalizations.of(context)!.example_category_network_description
       ),
-    ]
+      [
+        Example(
+            title: AppLocalizations.of(context)!.network_example_1_title,
+            description: AppLocalizations.of(context)!.network_example_1_description
+        ),
+      ]
     ),
   ];
 
@@ -232,6 +237,9 @@ class ExampleConfig {
     if (parent == AppLocalizations.of(context)!.example_category_template_title) {
       if (child == AppLocalizations.of(context)!.template_example_1_title) {
         return TemplateExampleOne(title: child, description: description);
+      }
+      if (child == AppLocalizations.of(context)!.template_example_2_title) {
+        return TemplateExampleTwo(title: child, description: description);
       }
     }
     if (parent == AppLocalizations.of(context)!.example_category_network_title) {

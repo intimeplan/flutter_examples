@@ -42,11 +42,18 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan),
+        colorScheme: ColorScheme.fromSeed(
+          // OR https://flutter.dev/brand
+          seedColor: Colors.cyan,
+          brightness: MediaQuery.of(context).platformBrightness
+        ),
+        // brightness: Brightness.dark,
         useMaterial3: true,
+        // primaryColor: Colors.cyan,
+        // primaryColorDark: Colors.cyan
       ),
       home: const MyHomePage(
-        title: 'Flutter Demo Home Page'
+        title: 'Flutter Examples'
       ),
     );
   }
