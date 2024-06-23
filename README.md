@@ -1,6 +1,22 @@
-# flutter_example
+# Flutter Examples
 
-A new Flutter project.
+A Flutter project includes examples of component integrations.
+
+## Run on Device
+
+### Android
+
+1. Join the group to access the permission of closed beta.  
+https://groups.google.com/g/intimeplan
+
+2. Visit the page to install the closed beta app.
+https://play.google.com/apps/testing/app.intimeplan.flutterexp
+
+### Apple
+
+1. Install TestFlight app on the device.
+2. Visit the page to install the open beta app on TestFlight.
+https://testflight.apple.com/join/E50kpsep
 
 ## Getting Started
 
