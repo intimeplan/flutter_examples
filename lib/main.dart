@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_example/example_list.dart';
 import 'package:flutter_example/information_page.dart';
@@ -109,10 +111,31 @@ class _MyHomePageState extends State<MyHomePage> {
                 // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
                 // change color while the other colors stay the same.
                 color: Theme.of(context).colorScheme.inversePrimary,
+                // image: DecorationImage(image: AssetImage("assets/appLogo.jpg")),
+                // color: Color(0xFF64C8C8),
               ),
-              child: Text(AppLocalizations.of(context)!.appName),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.appName,
+                    style: Theme.of(context).textTheme.titleMedium
+                  ),
+                  const Spacer(),
+                  const ClipOval(
+                    child: Opacity(
+                      opacity: 0.7,
+                      child: SizedBox(
+                        width: 48, height: 48,
+                        child: Image(image: AssetImage("assets/appLogo.jpg")),
+                      ),
+                    ),
+                  ),
+                ]
+              ),
             ),
             ListTile(
+              leading: Icon(Icons.topic_outlined),
               title: Text(AppLocalizations.of(context)!.example_page_title),
               onTap: () {
                 _scaffoldKey.currentState?.closeDrawer();
@@ -120,6 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),
             ListTile(
+              leading: Icon(Icons.info_outline),
               title: Text(AppLocalizations.of(context)!.information_page_title),
               onTap: () {
                 // Navigator.pop(context);

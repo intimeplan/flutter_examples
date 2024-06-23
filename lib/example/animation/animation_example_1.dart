@@ -65,14 +65,19 @@ class _AnimationExampleOneState extends State<_AnimationExampleOne> {
                 alignment: Alignment.topLeft,
                 child: AnimatedContainer(
                   clipBehavior: Clip.hardEdge,
-                  color: !_animated ? Colors.yellow : Colors.blue,
+                  color: !_animated
+                      ? Colors.yellow
+                      : Colors.blue,
                   padding:  EdgeInsets.all(!_animated ? 8 : 16),
                   width: !_animated ? size/2 : size,
                   height: !_animated ? size/2 : size,
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.fastOutSlowIn,
-                  child: SizedBox.expand(
+                  child: Opacity(
+                    opacity: 0.7,
+                    child: SizedBox.expand(
                       child: Image.asset("assets/480px-Hubble_ultra_deep_field.jpg")
+                    ),
                   ),
                 ),
               ),

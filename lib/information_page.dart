@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 import'dart:io' show Platform;
@@ -33,53 +35,51 @@ class InformationPage extends StatelessWidget {
           // // Make the initial height of the SliverAppBar larger than normal.
           // expandedHeight: 200,
         ),
-        // Next, create a SliverList
-        SliverList(
-          // Use a delegate to build items as they're scrolled on screen.
-          delegate: SliverChildBuilderDelegate(
-            // The builder function returns a ListTile with a title that
-            // displays the index of the current item.
-            (context, index) {
-              var title = _titles![index];
-              if(title == AppLocalizations.of(context)!.information_source_title) {
-                return ListTile(
-                  title: Text(title),
-                  onTap: () async {
-                    await launchUrl(Uri.parse(
-                      AppLocalizations.of(context)!.information_source_content_url)
-                    );
-                  },
-                );
-              }
-              if(title == AppLocalizations.of(context)!.information_store_title) {
-                return ListTile(
-                  title: Text(title),
-                  onTap: (){
-                    if(Platform.isAndroid) {
-                      // Todo
-                    }
-                    else if(Platform.isIOS) {
-                      // Todo
-                    }
-                  },
-                );
-              }
-              if(title == AppLocalizations.of(context)!.information_privacy_title) {
-                return ListTile(
-                  title: Text(title),
-                  onTap: () async {
-                    await launchUrl(Uri.parse(
-                        AppLocalizations.of(context)!.information_privacy_content_url)
-                    );
-                  },
-                );
-              }
-              return SizedBox();
+        SliverToBoxAdapter(
+          child: ListTile(
+            leading: Icon(Icons.code),
+            title: Text(AppLocalizations.of(context)!.information_source_title),
+            onTap: () async {
+              await launchUrl(Uri.parse(
+                  AppLocalizations.of(context)!.information_source_content_url)
+              );
             },
-            childCount: _titles != null ? _titles!.length : 0
           ),
         ),
-      ]
+        SliverToBoxAdapter(
+          child: ListTile(
+            leading: Icon(Icons.sports_esports_outlined),
+            title: Text(AppLocalizations.of(context)!.information_store_title),
+            onTap: () async {
+              if(Platform.isAndroid) {
+                // Alpha Channel
+                await launchUrl(Uri.parse(
+                    "https://play.google.com/apps/testing/app.intimeplan.flutterexp"
+                  )
+                );
+              }
+              else if(Platform.isIOS) {
+                // TestFlight
+                await launchUrl(Uri.parse(
+                    "https://testflight.apple.com/join/E50kpsep"
+                  )
+                );
+              }
+            },
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: ListTile(
+            leading: Icon(Icons.privacy_tip_outlined),
+            title: Text(AppLocalizations.of(context)!.information_privacy_title),
+            onTap: () async {
+              await launchUrl(Uri.parse(
+                AppLocalizations.of(context)!.information_privacy_content_url)
+              );
+            },
+          ),
+        ),
+      ],
     );
 
   }

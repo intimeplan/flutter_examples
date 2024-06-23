@@ -22,14 +22,14 @@
     "@animation_example_1_title": {
         "description": "對應 animation_example_1.dart"
     },
-    "animation_example_1_description": "",
+    "animation_example_1_description": "Control child widget by animating container",
 
 
     "animation_example_2_title": "Animated Text",
     "@animation_example_2_title": {
         "description": "對應 animation_example_2.dart"
     },
-    "animation_example_2_description": "",
+    "animation_example_2_description": "Control text length by animation controller",
 
 
     "animation_example_3_title": "Cubic Comparison",
@@ -85,16 +85,18 @@
 
     "network_example_1_title": "REST API",
     "@network_example_1_title": {},
-    "network_example_1_description": "",
+    "network_example_1_description": "An API url tester",
+
 
     "network_example_2_title": "Image Download & Share",
     "@network_example_2_title": {},
-    "network_example_2_description": "",
+    "network_example_2_description": "An image url tester",
     "network_example_2_title_url": "Image URL",
     "network_example_2_title_preview": "Image Preview (Long click to share)",
     "network_example_2_title_send": "Image Sending",
     "network_example_2_hint_no_image": "No image file",
     "network_example_2_hint_unable_share": "Unable to share",
+
 
 
     "wiki_universe_title": "Universe - Wikipedia",

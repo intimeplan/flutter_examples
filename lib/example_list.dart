@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_example/example/animation/animation_example_1.dart';
 import 'package:flutter_example/example/animation/animation_example_2.dart';
 import 'package:flutter_example/example/interaction/interaction_example_1.dart';
@@ -115,7 +116,8 @@ abstract class AbsExamplePage extends StatelessWidget {
 /// An Example [title] is key should be unique in same list layer.
 class Example {
   final String title, description;
-  Example({required this.title, required this.description});
+  IconData? icon;
+  Example({required this.title, required this.description, this.icon});
 }
 
 /// Example List Configuration
@@ -126,8 +128,10 @@ class ExampleConfig {
   /// Define example list by TITLES.
   /// List is a "parent > child" structure.
   late List<(Example parent, List<Example> children)> list = [
+    // category_animation
     (
       Example(
+        icon: Icons.animation,
         title: AppLocalizations.of(context)!.example_category_animation_title,
         description: AppLocalizations.of(context)!.example_category_animation_description
       ),
@@ -146,8 +150,10 @@ class ExampleConfig {
         ),
       ]
     ),
+    // category_layout
     (
       Example(
+        icon: Icons.widgets_outlined,
         title: AppLocalizations.of(context)!.example_category_layout_title,
         description: AppLocalizations.of(context)!.example_category_layout_description
       ),
@@ -157,53 +163,58 @@ class ExampleConfig {
           description: AppLocalizations.of(context)!.layout_example_1_description
         ),
         Example(
-            title: AppLocalizations.of(context)!.layout_example_2_title,
-            description: AppLocalizations.of(context)!.layout_example_2_description
+          title: AppLocalizations.of(context)!.layout_example_2_title,
+          description: AppLocalizations.of(context)!.layout_example_2_description
         ),
       ]
     ),
+    // category_interaction
     (
-    Example(
+      Example(
+        icon: Icons.swipe_left,
         title: AppLocalizations.of(context)!.example_category_interaction_title,
         description: AppLocalizations.of(context)!.example_category_interaction_description
-    ),
-    [
-      Example(
-          title: AppLocalizations.of(context)!.interaction_example_1_title,
-          description: AppLocalizations.of(context)!.interaction_example_1_description
-      ),
-    ]
-    ),
-    (
-      Example(
-          title: AppLocalizations.of(context)!.example_category_template_title,
-          description: AppLocalizations.of(context)!.example_category_template_description
       ),
       [
         Example(
-            title: AppLocalizations.of(context)!.template_example_1_title,
-            description: AppLocalizations.of(context)!.template_example_1_description
-        ),
-        Example(
-            title: AppLocalizations.of(context)!.template_example_2_title,
-            description: AppLocalizations.of(context)!.template_example_2_description
+          title: AppLocalizations.of(context)!.interaction_example_1_title,
+          description: AppLocalizations.of(context)!.interaction_example_1_description
         ),
       ]
     ),
+    // category_template
     (
       Example(
-          title: AppLocalizations.of(context)!.example_category_network_title,
-          description: AppLocalizations.of(context)!.example_category_network_description
+        icon: Icons.copy,
+        title: AppLocalizations.of(context)!.example_category_template_title,
+        description: AppLocalizations.of(context)!.example_category_template_description
       ),
       [
         Example(
-            title: AppLocalizations.of(context)!.network_example_1_title,
-            description: AppLocalizations.of(context)!.network_example_1_description
+          title: AppLocalizations.of(context)!.template_example_1_title,
+          description: AppLocalizations.of(context)!.template_example_1_description
         ),
-
         Example(
-            title: AppLocalizations.of(context)!.network_example_2_title,
-            description: AppLocalizations.of(context)!.network_example_2_description
+          title: AppLocalizations.of(context)!.template_example_2_title,
+          description: AppLocalizations.of(context)!.template_example_2_description
+        ),
+      ]
+    ),
+    // category_network
+    (
+      Example(
+        icon: Icons.public,
+        title: AppLocalizations.of(context)!.example_category_network_title,
+        description: AppLocalizations.of(context)!.example_category_network_description
+      ),
+      [
+        Example(
+          title: AppLocalizations.of(context)!.network_example_1_title,
+          description: AppLocalizations.of(context)!.network_example_1_description
+        ),
+        Example(
+          title: AppLocalizations.of(context)!.network_example_2_title,
+          description: AppLocalizations.of(context)!.network_example_2_description
         ),
       ]
     ),
@@ -244,10 +255,16 @@ class ExampleConfig {
       if (child == AppLocalizations.of(context)!.template_example_1_title) {
         return TemplateExampleOne(title: child, description: description);
       }
+      if (child == AppLocalizations.of(context)!.template_example_2_title) {
+        return TemplateExampleTwo(title: child, description: description);
+      }
     }
     if (parent == AppLocalizations.of(context)!.example_category_network_title) {
       if (child == AppLocalizations.of(context)!.network_example_1_title) {
         return NetworkExampleOne(title: child, description: description);
+      }
+      if (child == AppLocalizations.of(context)!.network_example_2_title) {
+        return NetworkExampleTwo(title: child, description: description);
       }
     }
     return null;
@@ -290,16 +307,18 @@ class ExampleList extends StatelessWidget {
       }
       widgets.add(
         _ListTileHero(
-            title: child.title,
-            description: child.description.trim().isNotEmpty ? child.description : null,
-            onTap: () {
-              Navigator.of(context).push(_MyPageRoute<void>(builder: (context) {
-                return widget;
-              }));
-            }),
+          icon: child.icon,
+          title: child.title,
+          description: child.description.trim().isNotEmpty ? child.description : null,
+          onTap: () {
+            Navigator.of(context).push(_MyPageRoute<void>(builder: (context) {
+              return widget;
+            }));
+          }),
       );
     }
     return ExpansionTile(
+      leading: parent.icon != null ? Icon(parent.icon) : null,
       title: Text(parent.title, style: Theme.of(context).textTheme.titleMedium),
       subtitle: parent.description.trim().isNotEmpty ? Text(parent.description) : null,
       children: widgets,
@@ -325,14 +344,16 @@ class _ListTileHero extends StatelessWidget {
 
   final String title;
   final String? description;
+  final IconData? icon;
   final GestureTapCallback? onTap;
   const _ListTileHero({
-    required this.title, required this.onTap, this.description
+    required this.title, required this.onTap, this.description, this.icon,
   });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      leading: icon != null ? Icon(icon) : null,
       title: Hero(
         tag: title, // AbsExamplePage.hero_key_title,
         // Don't forget Material(), see example from:
