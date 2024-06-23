@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_example/example_list.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -17,31 +16,67 @@ class InteractionExampleOne extends AbsExamplePage {
     super.key, required super.title, super.description
   });
 
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (context, constraints){
+      return _InteractionExampleOne(
+          appBar: getAppBar(context, constraints.maxWidth)
+        );
+      }
+    );
+  }
+}
+
+class _InteractionExampleOne extends StatefulWidget {
+
+  final AppBar appBar;
+  const _InteractionExampleOne({
+    super.key, required this.appBar
+  });
+
+  @override
+  State<StatefulWidget> createState() {
+    return _InteractionExampleOneState();
+  }
+}
+
+class _InteractionExampleOneState extends State<_InteractionExampleOne> {
 
   @override
   Widget build(BuildContext context) {
-    return BackEventBroadcast(
-      child: LayoutBuilder(builder: (context, constraints){
-        return Scaffold(
-          appBar: getAppBar(context, constraints.maxWidth),
-          body: getBody(),
-          floatingActionButton: FloatingActionButton(
-            child: const Icon(Icons.arrow_back),
-            onPressed: () {
-              const BackEvent().dispatch(context);
-            }
-          )
-        );
-      }),
+    return NavigatorEventBroadcast(
+      child: BackEventBroadcast(
+        child: LayoutBuilder(builder: (context, constraints){
+          return Scaffold(
+            appBar: widget.appBar,
+            body: getBody(),
+            floatingActionButton: Consumer<NavigatorEventProxy>(
+              builder: (context, event, child) {
+                return AnimatedScale(
+                  scale: (event.notification?.canHandlePop ?? false) ? 1 : 0,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeOut,
+                  child: FloatingActionButton(
+                    child: const Icon(Icons.arrow_back),
+                    onPressed: () {
+                      const BackEvent().dispatch(context);
+                    }
+                  ),
+                );
+              },
+            ),
+          );
+        }),
+      ),
     );
   }
 
+  PageNavigator? _page;
   Widget? getBody() {
-    return PageNavigator();
+    _page ??= PageNavigator();
+    return _page;
   }
-
 }
-
 
 
 class PageNavigator extends StatelessWidget {
@@ -56,16 +91,16 @@ class PageNavigator extends StatelessWidget {
     // On FAB click to back
     return Consumer<BackEventProxy>(
       builder: (context, event, child) {
+        // if the last back event is null,
+        // current builder is on page initializing, don't pop any thing.
+        if(event.last == null) {
+          return child!;
+        }
         if(_popChildNavigator()) {
           return child!;
         }
         if(_popMyNavigator()) {
           return child!;
-        }
-        // if the last back event is null,
-        // current builder is on page initializing, don't pop
-        if(event.last != null) {
-          Navigator.of(context).pop();
         }
         return child!;
       },
@@ -189,6 +224,11 @@ class PageNavigator extends StatelessWidget {
     return false;
   }
 
+  bool _hasLocalPop(){
+    return (_childNavigatorKey.currentState?.canPop() ?? false)
+      || (_myNavigatorKey.currentState?.canPop() ?? false);
+  }
+
 }
 
 
@@ -301,6 +341,43 @@ class _PageRoute<T> extends MaterialPageRoute<T>  {
   }
 }
 
+
+/// [NavigatorEventBroadcast] works with [Consumer] type [BackEventProxy]
+class NavigatorEventBroadcast extends StatelessWidget {
+
+  final Widget child;
+  final NavigatorEventProxy proxy = NavigatorEventProxy();
+
+  NavigatorEventBroadcast({
+    super.key,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider<NavigatorEventProxy>(
+      create:  (context) => proxy,
+      child: NotificationListener<NavigationNotification>(
+        onNotification: (notification) {
+          proxy.send(notification);
+          return false;
+        },
+        child: child,
+      ),
+    );
+  }
+}
+
+class NavigatorEventProxy extends ChangeNotifier {
+  NavigationNotification? notification;
+  void send(NavigationNotification value) {
+    notification = value;
+    notifyListeners();
+  }
+}
+
+
+
 /// [BackEventBroadcast] works with [Consumer] type [BackEventProxy]
 class BackEventBroadcast extends StatelessWidget {
 
@@ -319,16 +396,12 @@ class BackEventBroadcast extends StatelessWidget {
       child: NotificationListener<BackEvent>(
         onNotification: (notification) {
           proxy.send(notification);
-          return true;
+          return false;
         },
         child: child,
       ),
     );
   }
-}
-
-class BackEvent extends Notification {
-  const BackEvent();
 }
 
 class BackEventProxy extends ChangeNotifier {
@@ -337,4 +410,8 @@ class BackEventProxy extends ChangeNotifier {
     last = value;
     notifyListeners();
   }
+}
+
+class BackEvent extends Notification {
+  const BackEvent();
 }
